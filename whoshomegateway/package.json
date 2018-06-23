@@ -1,0 +1,18 @@
+{
+  "name": "whoshomegateway",
+  "version": "1.0.0",
+  "description": "This application is finds all mac addresses connected on its network and takes commands to know who is home",
+  "main": "app.js",
+  "scripts": {
+    "test": ""
+  },
+  "dependencies": {
+    "az-iot-bi": "^0.1.18",
+    "azure-iot-device": "1.1.7",
+    "azure-iot-device-mqtt": "1.1.7"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^3.17.1"
+  }
+}
