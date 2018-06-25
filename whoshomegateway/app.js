@@ -10,6 +10,9 @@ const Protocol = require('azure-iot-device-mqtt').Mqtt;
 
 const bi = require('az-iot-bi');
 
+//To scan the MAC addresses on the network
+const nmap = require('libnmap');
+
 var client, config;
 
 function sendMessage() {
@@ -24,9 +27,39 @@ function sendMessage() {
 }
 
 function onScan(request, response) { //The payload must be in json format or string
-    console.log('Try to invoke method scan(' + request.payload || '' + ')')
+    console.log('Scan request received. scan(' + request.payload || '' + ')');
 
-    response.send(200, 'Successully scanned mac addresses', function (err) {
+    let scannedDevices = [];
+
+    nmap.scan(scanOpts, function(err, report) {
+        console.log('scanned');
+    if (err) throw new Error(err);
+    
+    for (let item in report) {
+        let discovery = report[item];
+        let host = discovery['host'];
+    
+        if(host == null || host.length == 0)
+            continue;
+    
+        host = host[0];
+        let address = host['address'];
+    
+        if (address == null)
+            continue;
+    
+        for (let index in address) {
+            let addr = address[index];
+            addr = addr['item'];
+            if (addr['addrtype'] != 'mac')
+                continue;
+            scannedDevices.push(addr);
+            console.log(addr.addr);
+        }
+    }
+    });
+
+    response.send(200, 'Successully scanned mac addresses : \n' + JSON.stringify(scannedDevices), function (err) {
         if (err) {
             console.error('[IoT hub Client] Failed sending a method response:\n' + err.message);
         }
@@ -97,5 +130,10 @@ client.open((err) => {
     // set C2D and device method callback
     client.onDeviceMethod('scan', onScan);
     client.on('message', receiveMessageCallback);
-    sendMessage();
+    
 });
+
+let scanOpts = {
+    range: ['192.168.2.1/24']
+  };
+

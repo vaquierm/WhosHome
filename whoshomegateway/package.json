@@ -8,8 +8,9 @@
   },
   "dependencies": {
     "az-iot-bi": "^0.1.18",
-    "azure-iot-device": "1.1.7",
-    "azure-iot-device-mqtt": "1.1.7"
+    "azure-iot-device": "^1.4.3",
+    "azure-iot-device-mqtt": "^1.4.4",
+    "libnmap": "^0.4.11"
   },
   "license": "MIT",
   "devDependencies": {
