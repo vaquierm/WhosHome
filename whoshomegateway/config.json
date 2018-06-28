@@ -1,0 +1,6 @@
+{
+    "deviceId": "",
+    "credentialPath": "~/.iot-hub",
+    "connectionString" : "IoTConnectionStringHere",
+    "macDatabaseString" : "DBConnectionStringHere"
+}
