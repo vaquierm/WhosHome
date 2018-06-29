@@ -15,7 +15,8 @@ var ObjectId = require('mongodb').ObjectID;
 //To scan the MAC addresses on the network
 const nmap = require('libnmap');
 let scanOpts = {
-    range: ['192.168.2.1/24']
+    range: ['192.168.2.1/24'],
+    timeout: 0.5
   };
 
 let IoTclient, DBClient, config;
@@ -41,22 +42,33 @@ function onScan(request, response) { //The payload must be in json format or str
 
     nmap.scan(scanOpts, function(err, report) {
 
-        console.log('[nmap] Network scanned, processing...');
-    
-        if (err) throw new Error(err);
+        if(err) {
+            console.error('[nmap] Error scanning network : ' + err.message);
+        }
+
+        let count = 0;
+        for (let item in report) {
+            count++;
+        }
+
+        console.log('[nmap] Network scanned, processing... ( ' + count + ' devices found )');
         
         for (let item in report) {
             let discovery = report[item];
             let host = discovery['host'];
         
-            if(host == null || host.length == 0)
+            if(host == null || host.length == 0) {
+                console.log('[nmap] No host found, skipping item');
                 continue;
+            }
         
             host = host[0];
             let address = host['address'];
         
-            if (address == null)
+            if (address == null) {
+                console.log('[nmap] No adresses found, skipping item');
                 continue;
+            }
         
             for (let index in address) {
                 let addr = address[index];
@@ -68,10 +80,13 @@ function onScan(request, response) { //The payload must be in json format or str
             }
         }
 
+        console.log('[Cosmos DB Client] Fetching Mac address database...');
         //Mathing scan results with database
         let db = DBClient.db('whoshome');
         let macs = db.collection('macAddresses').find();
         
+        console.log('[Cosmos DB Client] Mac Address database successfully fetched!');
+
         macs.each(function(err, doc) {
             if (err) {
                 console.err('[Cosmos DB Client] Document error: ' + err.message);
@@ -82,10 +97,13 @@ function onScan(request, response) { //The payload must be in json format or str
             }
         });
 
+        //TODO : write code that ensure that this happens after the for each
+
+        console.error('[IoT hub Client] sending back response ( ' + recognozedDevices.length + ' devices recognized )');
         //sending response back
-        response.send(200, JSON.stringify(recognozedDevices), function (err) {
+        response.send(200, recognozedDevices, function (err) {
             if (err) {
-                console.error('[IoT hub Client] Failed sending a method response:\n' + err.message);
+                console.error('[IoT hub Client] Failed sending a method response: ' + err.message);
             }
         });
 
@@ -139,7 +157,6 @@ function initClientDB() {
         DBClient = client;
     });
 }
-
 
 // read in configuration in config.json
 try {
