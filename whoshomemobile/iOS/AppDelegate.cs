@@ -1,5 +1,7 @@
-﻿using Foundation;
+﻿using System;
+using Foundation;
 using UIKit;
+
 
 namespace whoshomemobile.iOS
 {
@@ -10,16 +12,40 @@ namespace whoshomemobile.iOS
     {
         // class-level declarations
 
+        public static AppDelegate Instance { get; private set; }
+
+        public UIStoryboard Storyboard;
+
         public override UIWindow Window
         {
             get;
             set;
         }
 
+        public static void LoadStoryboard(string storyboardName)
+        {
+            Instance.Storyboard = UIStoryboard.FromName(storyboardName, null);
+
+            Instance.Window.RootViewController = Instance.Storyboard.InstantiateInitialViewController();
+            Instance.Window.MakeKeyAndVisible();
+        }
+
         public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
         {
             // Override point for customization after application launch.
             // If not required for your application you can safely delete this method
+
+            Instance = this;
+
+            //Initialize the databases and IoTManager
+            IoTClientManager.InitIoTClientManager();
+            SignInManager.InitSignInManager();
+
+            Storyboard = UIStoryboard.FromName("SignIn", null);
+            SignInViewController signInViewController = Storyboard.InstantiateInitialViewController() as SignInViewController;
+
+            Window.RootViewController = signInViewController;
+            Window.MakeKeyAndVisible();
 
             return true;
         }

@@ -7,14 +7,14 @@ namespace whoshomemobile
 {
     public class IoTClientManager
     {
-        private ServiceClient _serviceClient;
-        
-        public IoTClientManager()
+        private static ServiceClient _serviceClient;
+
+        internal static void InitIoTClientManager()
         {
-            _serviceClient = ServiceClient.CreateFromConnectionString(Authentification.ServiceConnectionString);
+            _serviceClient = ServiceClient.CreateFromConnectionString(Authentification.IoTServiceConnectionString);
         }
 
-        public async void ScanMethod(string deviceId)
+        public static async void ScanMethod(string deviceId)
         {
             CloudToDeviceMethod method = new CloudToDeviceMethod("scan");
             Task<CloudToDeviceMethodResult> resultTask = _serviceClient.InvokeDeviceMethodAsync(deviceId, method);
