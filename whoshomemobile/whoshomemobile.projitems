@@ -12,5 +12,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)IoTClientManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Authentification.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SignInManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Constants.cs" />
   </ItemGroup>
 </Project>
