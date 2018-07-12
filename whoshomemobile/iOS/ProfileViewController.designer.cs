@@ -56,23 +56,7 @@ namespace whoshomemobile.iOS
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIButton PiIDActionButton { get; set; }
-
-        [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIButton PiIDCancelButton { get; set; }
-
-        [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UITextField PiIDTextBox { get; set; }
-
-        [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIButton UsernameActionButton { get; set; }
-
-        [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIButton UsernameCancelButton { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
@@ -130,29 +114,9 @@ namespace whoshomemobile.iOS
                 PasswordTextBox = null;
             }
 
-            if (PiIDActionButton != null) {
-                PiIDActionButton.Dispose ();
-                PiIDActionButton = null;
-            }
-
-            if (PiIDCancelButton != null) {
-                PiIDCancelButton.Dispose ();
-                PiIDCancelButton = null;
-            }
-
             if (PiIDTextBox != null) {
                 PiIDTextBox.Dispose ();
                 PiIDTextBox = null;
-            }
-
-            if (UsernameActionButton != null) {
-                UsernameActionButton.Dispose ();
-                UsernameActionButton = null;
-            }
-
-            if (UsernameCancelButton != null) {
-                UsernameCancelButton.Dispose ();
-                UsernameCancelButton = null;
             }
 
             if (UsernameTextBox != null) {

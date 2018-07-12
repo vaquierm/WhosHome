@@ -39,14 +39,6 @@ namespace whoshomemobile.iOS
             }
         }
 
-        private bool _editingUsername
-        {
-            get
-            {
-                return UsernameTextBox.Enabled;
-            }
-        }
-
         private bool _editingPassword
         {
             get
@@ -71,14 +63,6 @@ namespace whoshomemobile.iOS
             }
         }
 
-        private bool _editingPiID
-        {
-            get
-            {
-                return PiIDTextBox.Enabled;
-            }
-        }
-
         public ProfileViewController(IntPtr handle) : base(handle)
         {
         }
@@ -88,16 +72,12 @@ namespace whoshomemobile.iOS
             base.ViewDidLoad();
             // Perform any additional setup after loading the view, typically from a nib.
 
-            UsernameActionButton.TouchUpInside += UsernameActionClick;
-            UsernameCancelButton.TouchUpInside += UsernameCancelClick;
             PasswordActionButton.TouchUpInside += PasswordActionClick;
             PasswordCancelButton.TouchUpInside += PasswordCancelClick;
             FullNameActionButton.TouchUpInside += FullNameActionClick;
             FullNameCancelButton.TouchUpInside += FullNameCancelClick;
             MacAddressActionButton.TouchUpInside += MacAddressActionClick;
             MacAddressCancelButton.TouchUpInside += MacAddressCancelClick;
-            PiIDActionButton.TouchUpInside += PiIDActionClick;
-            PiIDCancelButton.TouchUpInside += PiIDCancelClick;
 
             UsernameTextBox.Text = _userPrivate.Id;
             PasswordTextBox.Text = _userPrivate.Password;
@@ -117,20 +97,16 @@ namespace whoshomemobile.iOS
             if (ActionButtons == null)
             {
                 ActionButtons = new Dictionary<InputType, UIButton>();
-                ActionButtons[InputType.Username] = UsernameActionButton;
                 ActionButtons[InputType.Password] = PasswordActionButton;
                 ActionButtons[InputType.FullName] = FullNameActionButton;
                 ActionButtons[InputType.MacAddress] = MacAddressActionButton;
-                ActionButtons[InputType.PiID] = PiIDActionButton;
             }
             if (CancelButtons == null)
             {
                 CancelButtons = new Dictionary<InputType, UIButton>();
-                CancelButtons[InputType.Username] = UsernameCancelButton;
                 CancelButtons[InputType.Password] = PasswordCancelButton;
                 CancelButtons[InputType.FullName] = FullNameCancelButton;
                 CancelButtons[InputType.MacAddress] = MacAddressCancelButton;
-                CancelButtons[InputType.PiID] = PiIDCancelButton;
             }
         }
 
@@ -143,27 +119,6 @@ namespace whoshomemobile.iOS
 
 
         #region Button Click Handlers
-
-        private void UsernameActionClick(object sender, EventArgs e)
-        {
-            if (!_editingUsername)
-            {
-                StartEditing(InputType.Username);
-            }
-            else
-            {
-                _userPublic.Id = UsernameTextBox.Text;
-                //Push to database
-
-                DoneEditing(InputType.Username);
-            }
-        }
-
-        private void UsernameCancelClick(object sender, EventArgs e)
-        {
-            UsernameTextBox.Text = _userPublic.Id;
-            DoneEditing(InputType.Username);
-        }
 
         private void PasswordActionClick(object sender, EventArgs e)
         {
@@ -232,27 +187,6 @@ namespace whoshomemobile.iOS
         {
             MacAddressTextBox.Text = _userPublic.MacAddress;
             DoneEditing(InputType.MacAddress);
-        }
-
-        private void PiIDActionClick(object sender, EventArgs e)
-        {
-            if (!_editingPiID)
-            {
-                StartEditing(InputType.PiID);
-            }
-            else
-            {
-                _userPrivate.PiID = PiIDTextBox.Text;
-                //Push to database
-
-                DoneEditing(InputType.PiID);
-            }
-        }
-
-        private void PiIDCancelClick(object sender, EventArgs e)
-        {
-            PiIDTextBox.Text = _userPrivate.PiID;
-            DoneEditing(InputType.PiID);
         }
 
         #endregion
