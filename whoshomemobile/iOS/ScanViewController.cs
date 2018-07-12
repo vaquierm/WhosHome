@@ -4,9 +4,9 @@ using UIKit;
 
 namespace whoshomemobile.iOS
 {
-    public partial class SecondViewController : UIViewController
+    public partial class ScanViewController : UIViewController
     {
-        protected SecondViewController(IntPtr handle) : base(handle)
+        protected ScanViewController(IntPtr handle) : base(handle)
         {
             // Note: this .ctor should not contain any initialization logic.
         }
@@ -22,5 +22,7 @@ namespace whoshomemobile.iOS
             base.DidReceiveMemoryWarning();
             // Release any cached data, images, etc that aren't in use.
         }
+
+
     }
 }

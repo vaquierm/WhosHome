@@ -10,8 +10,8 @@ using System.CodeDom.Compiler;
 
 namespace whoshomemobile.iOS
 {
-    [Register ("SecondViewController")]
-    partial class SecondViewController
+    [Register ("ScanViewController")]
+    partial class ScanViewController
     {
         void ReleaseDesignerOutlets ()
         {

@@ -132,9 +132,9 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
-    <Compile Include="SecondViewController.cs" />
-    <Compile Include="SecondViewController.designer.cs">
-      <DependentUpon>SecondViewController.cs</DependentUpon>
+    <Compile Include="ScanViewController.cs" />
+    <Compile Include="ScanViewController.designer.cs">
+      <DependentUpon>ScanViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="SignInViewController.cs" />
     <Compile Include="SignInViewController.designer.cs">
