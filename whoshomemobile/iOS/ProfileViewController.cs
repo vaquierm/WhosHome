@@ -17,6 +17,10 @@ namespace whoshomemobile.iOS
             {
                 return SignInManager.userPrivate;
             }
+            set
+            {
+                SignInManager.userPrivate = value;
+            }
         }
 
         private UserPublic _userPublic
@@ -24,6 +28,10 @@ namespace whoshomemobile.iOS
             get
             {
                 return SignInManager.userPublic;
+            }
+            set
+            {
+                SignInManager.userPublic = value;
             }
         }
 
@@ -72,6 +80,8 @@ namespace whoshomemobile.iOS
             base.ViewDidLoad();
             // Perform any additional setup after loading the view, typically from a nib.
 
+            SignOutButton.TouchUpInside += SignOutButtonClick;
+
             PasswordActionButton.TouchUpInside += PasswordActionClick;
             PasswordCancelButton.TouchUpInside += PasswordCancelClick;
             FullNameActionButton.TouchUpInside += FullNameActionClick;
@@ -119,6 +129,13 @@ namespace whoshomemobile.iOS
 
 
         #region Button Click Handlers
+
+        private void SignOutButtonClick(object sender, EventArgs e)
+        {
+            _userPublic = null;
+            _userPrivate = null;
+            AppDelegate.LoadStoryboard("SignIn");
+        }
 
         private void PasswordActionClick(object sender, EventArgs e)
         {

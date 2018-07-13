@@ -60,6 +60,10 @@ namespace whoshomemobile.iOS
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIButton SignOutButton { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UITextField UsernameTextBox { get; set; }
 
         void ReleaseDesignerOutlets ()
@@ -117,6 +121,11 @@ namespace whoshomemobile.iOS
             if (PiIDTextBox != null) {
                 PiIDTextBox.Dispose ();
                 PiIDTextBox = null;
+            }
+
+            if (SignOutButton != null) {
+                SignOutButton.Dispose ();
+                SignOutButton = null;
             }
 
             if (UsernameTextBox != null) {

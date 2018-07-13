@@ -163,7 +163,7 @@ namespace whoshomemobile.iOS
         /// <param name="errorMessage">Error message.</param>
         public bool ValidateMacAddress(string address, out string ErrorMessage)
         {
-            string input = password;
+            string input = address;
             ErrorMessage = string.Empty;
 
             if (string.IsNullOrWhiteSpace(input))

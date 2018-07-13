@@ -107,6 +107,7 @@
     <Reference Include="Microsoft.Azure.Amqp">
       <HintPath>..\packages\Microsoft.Azure.Amqp.2.3.2\lib\net45\Microsoft.Azure.Amqp.dll</HintPath>
     </Reference>
+    <Reference Include="MonoTouch.Dialog-1" />
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
@@ -145,6 +146,10 @@
       <DependentUpon>ProfileViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="PiIDPickerModel.cs" />
+    <Compile Include="FeaturesViewController.cs" />
+    <Compile Include="FeaturesViewController.designer.cs">
+      <DependentUpon>FeaturesViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <Import Project="..\whoshomemobile.projitems" Label="Shared" Condition="Exists('..\whoshomemobile.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
