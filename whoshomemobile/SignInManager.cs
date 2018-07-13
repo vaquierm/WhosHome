@@ -82,6 +82,9 @@ namespace whoshomemobile.iOS
             _documentClient.CreateDocumentAsync(PublicUsersCollectionUri, uPublic);
             _documentClient.CreateDocumentAsync(PrivateUsersCollectionUri, uPrivate);
 
+            userPublic = uPublic;
+            userPrivate = uPrivate;
+
             statusMessage = $"User '{username}' has been registered successfully.";
             return true;
         }
@@ -151,6 +154,41 @@ namespace whoshomemobile.iOS
                 return true;
             }
         }
+
+        /// <summary>
+        /// Validates the mac address.
+        /// </summary>
+        /// <returns><c>true</c>, if mac address was validated, <c>false</c> otherwise.</returns>
+        /// <param name="address">Address.</param>
+        /// <param name="errorMessage">Error message.</param>
+        public bool ValidateMacAddress(string address, out string ErrorMessage)
+        {
+            string input = password;
+            ErrorMessage = string.Empty;
+
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                ErrorMessage = "Mac Address should not be empty";
+                return false;
+            }
+
+            input = input.Trim(' ', ':');
+
+            Regex r = new Regex("^([:xdigit:]){12}$");
+
+
+            if (r.IsMatch(input))
+            {
+                //TODO : check in database if it is unique
+                ErrorMessage = "Mac Address is valid";
+                return true;
+            }
+            else
+            {
+                ErrorMessage = "Mac Address format is invalid...";
+                return false;
+            }
+        }
     }
 
 
@@ -182,7 +220,7 @@ namespace whoshomemobile.iOS
         {
             Id = username;
             Password = password;
-            PiID = PiID;
+            PiID = piID;
         }
 
         [JsonProperty(PropertyName = "id")]
