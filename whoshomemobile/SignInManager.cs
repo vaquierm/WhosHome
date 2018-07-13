@@ -64,7 +64,7 @@ namespace whoshomemobile.iOS
             return true;
         }
 
-        public static bool Register(string username, string password, string fullName, string macAddress, out string statusMessage, string piID = "")
+        public static bool Register(string username, string password, string fullName, string macAddress, out string statusMessage, string piID)
         {
             UserPublic uPublic = new UserPublic(username, fullName, macAddress);
             UserPrivate uPrivate = new UserPrivate(username, password, piID);
@@ -124,9 +124,7 @@ namespace whoshomemobile.iOS
 
             var hasNumber = new Regex(@"[0-9]+");
             var hasUpperChar = new Regex(@"[A-Z]+");
-            var hasMiniMaxChars = new Regex(@".{8,15}");
             var hasLowerChar = new Regex(@"[a-z]+");
-            var hasSymbols = new Regex(@"[!@#$%^&*()_+=\[{\]};:<>|./?,-]");
 
             if (!hasLowerChar.IsMatch(input))
             {
@@ -138,20 +136,14 @@ namespace whoshomemobile.iOS
                 ErrorMessage = "Password should contain At least one upper case letter";
                 return false;
             }
-            else if (!hasMiniMaxChars.IsMatch(input))
+            else if (password.Length < 8)
             {
-                ErrorMessage = "Password should not be less than or greater than 12 characters";
+                ErrorMessage = "Password should not be less 8 characters";
                 return false;
             }
             else if (!hasNumber.IsMatch(input))
             {
                 ErrorMessage = "Password should contain At least one numeric value";
-                return false;
-            }
-
-            else if (!hasSymbols.IsMatch(input))
-            {
-                ErrorMessage = "Password should contain At least one special case characters";
                 return false;
             }
             else
@@ -173,7 +165,9 @@ namespace whoshomemobile.iOS
 
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
+        [JsonProperty(PropertyName = "fullName")]
         public string FullName { get; set; }
+        [JsonProperty(PropertyName = "macAddress")]
         public string MacAddress { get; set; }
 
         public override string ToString()
@@ -193,8 +187,12 @@ namespace whoshomemobile.iOS
 
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
+        [JsonProperty(PropertyName = "password")]
         public string Password { get; set; }
+        [JsonProperty(PropertyName = "piID")]
         public string PiID { get; set; }
+        [JsonProperty(PropertyName = "authorizedPiList")]
+        public List<string> AuthorizedPiList = new List<string>();
 
         public override string ToString()
         {

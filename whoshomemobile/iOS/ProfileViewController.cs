@@ -129,12 +129,14 @@ namespace whoshomemobile.iOS
             else
             {
                 string messgae;
+                InformationLabel.TextColor = UIColor.Red;
                 if (InputValidation.ValidatePassword(PasswordTextBox.Text, out messgae))
                 {
                     messgae = StringConstants.PasswordChangedMessage;
                     _userPrivate.Password = UsernameTextBox.Text;
                     //Push to database
 
+                    InformationLabel.TextColor = UIColor.DarkGray;
                     DoneEditing(InputType.Password);
                 }
                 _informationLabelMessage = messgae;
