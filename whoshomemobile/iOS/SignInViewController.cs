@@ -78,6 +78,8 @@ namespace whoshomemobile.iOS
             OnActionChanged(null, null);
             ActionControl.ValueChanged += OnActionChanged;
             ReadyButton.TouchUpInside += ReadyButtonClick;
+
+            MacAddressTextBox.Text = SignInManager.GetMacAddress();
         }
 
 
@@ -133,12 +135,6 @@ namespace whoshomemobile.iOS
             }
             else
             {
-                if (!InputValidation.ValidatePassword(_password, out message))
-                {
-                    InformationLabel.TextColor = UIColor.Red;
-                    _message = message;
-                    return;
-                }
                 if (!SignInManager.Register(_username, _password, _fullName, _macAddress, out message, _piID))
                 {
                     InformationLabel.TextColor = UIColor.Red;

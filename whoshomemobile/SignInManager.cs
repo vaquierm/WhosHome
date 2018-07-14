@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using System.Configuration;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Net.NetworkInformation;
 
 namespace whoshomemobile.iOS
 {
@@ -69,15 +70,17 @@ namespace whoshomemobile.iOS
             UserPublic uPublic = new UserPublic(username, fullName, macAddress);
             UserPrivate uPrivate = new UserPrivate(username, password, piID);
 
-            if (!IsUsernameValid(username))
+            if (UsernameExists(username))
             {
                 statusMessage = $"The username '{username}' is already taken.";
                 return false;
             }
-            else if (!IsPiIDValid(piID))
+            else if (PiIDExists(piID))
             {
                 statusMessage = $"The Pi ID '{piID}' is already taken.";
             }
+            if (!InputValidation.ValidatePassword(password, out statusMessage))
+                return false;
 
             _documentClient.CreateDocumentAsync(PublicUsersCollectionUri, uPublic);
             _documentClient.CreateDocumentAsync(PrivateUsersCollectionUri, uPrivate);
@@ -89,20 +92,69 @@ namespace whoshomemobile.iOS
             return true;
         }
 
-        private static bool IsUsernameValid(string username)
+        public static bool AddMacAddress(string fullName, string macAddress, out string ErrorMessage)
+        {
+            if (!InputValidation.ValidateMacAddress(macAddress, out ErrorMessage))
+            {
+                return false;
+            }
+
+            //TODO: generate an ID for this document
+            UserPublic newUser = new UserPublic("", fullName, macAddress);
+            _documentClient.CreateDocumentAsync(PublicUsersCollectionUri, newUser);
+
+            ErrorMessage = $"The mac address for {fullName} was added to the database.";
+            return true;
+        }
+
+        public static bool RequestPermission(string piID, out string ErrorMessage)
+        {
+            if (!PiIDExists(piID))
+            {
+                ErrorMessage = $"You cannot request the permission to scan '{piID}' because it does not exist...";
+                return false;
+            }
+
+            //TODO: get the user with this pi ID and add yourself to the request list and push to database
+            ErrorMessage = $"A request was sent to scan the pi '{piID}'!";
+            return true;
+        }
+
+        public static string GetMacAddress()
+        {
+            string macAddress = string.Empty;
+            try
+            {
+                NetworkInterface nic = (NetworkInterface.GetAllNetworkInterfaces()).First(n => n.NetworkInterfaceType == NetworkInterfaceType.Ethernet && n.OperationalStatus == OperationalStatus.Up);
+                string macAddressesString = nic.GetPhysicalAddress().ToString();
+
+                for (int i = 0; i < macAddressesString.Length; i++)
+                {
+                    if (i > 0 && i % 2 == 0)
+                        macAddress += ":";
+                    macAddress += macAddressesString[i];
+                }
+            }
+            finally
+            {
+            }
+            return macAddress;
+        }
+
+        private static bool UsernameExists(string username)
         {
             IQueryable<UserPublic> userPublicQueryable = _documentClient.CreateDocumentQuery<UserPublic>(
                 PublicUsersCollectionUri).Where(f => f.Id == username);
 
-            return (userPublicQueryable.Count() == 0);
+            return (userPublicQueryable.Count() != 0);
         }
 
-        private static bool IsPiIDValid(string piID)
+        private static bool PiIDExists(string piID)
         {
             IQueryable<UserPrivate> userPrivateQueryable = _documentClient.CreateDocumentQuery<UserPrivate>(
                 PrivateUsersCollectionUri).Where(f => f.PiID == piID);
 
-            return (userPrivateQueryable.Count() == 0);
+            return (userPrivateQueryable.Count() != 0);
         }
     }
 
@@ -160,8 +212,8 @@ namespace whoshomemobile.iOS
         /// </summary>
         /// <returns><c>true</c>, if mac address was validated, <c>false</c> otherwise.</returns>
         /// <param name="address">Address.</param>
-        /// <param name="errorMessage">Error message.</param>
-        public bool ValidateMacAddress(string address, out string ErrorMessage)
+        /// <param name="ErrorMessage">Error message.</param>
+        public static bool ValidateMacAddress(string address, out string ErrorMessage)
         {
             string input = address;
             ErrorMessage = string.Empty;
@@ -231,6 +283,8 @@ namespace whoshomemobile.iOS
         public string PiID { get; set; }
         [JsonProperty(PropertyName = "authorizedPiList")]
         public List<string> AuthorizedPiList = new List<string>();
+        [JsonProperty(PropertyName = "authorizedPiList")]
+        public List<string> ScanRequestList = new List<string>();
 
         public override string ToString()
         {
