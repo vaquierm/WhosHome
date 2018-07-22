@@ -4,7 +4,6 @@ using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 using Microsoft.Azure.Documents.Linq;
 using Newtonsoft.Json;
-using System.Configuration;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Net.NetworkInformation;
@@ -44,8 +43,14 @@ namespace whoshomemobile
 
         public static bool LogIn(string username, string password, out string statusMessage) {
             IQueryable<UserPrivate> userPrivateQueryable = _documentClient.CreateDocumentQuery<UserPrivate>(
-                PublicUsersCollectionUri).Where(f => f.Id == username && f.Password == password);
+                PublicUsersCollectionUri);//.Where(f => f.Id == username && f.Password == password);
 
+            foreach (UserPrivate p in userPrivateQueryable)
+            {
+                Console.WriteLine("\tRead {0}", p);
+            }
+
+            int count = userPrivateQueryable.Count();
             if (userPrivateQueryable.Count() != 1)
             {
                 statusMessage = "Log in failed! Username or password is incorrect.";
@@ -57,7 +62,12 @@ namespace whoshomemobile
             userPrivate = userPrivateQueryable.First();
 
             IQueryable<UserPublic> userPublicQueryable = _documentClient.CreateDocumentQuery<UserPublic>(
-                PublicUsersCollectionUri).Where(f => f.Id == username);
+                PublicUsersCollectionUri);//.Where(f => f.Id == username);
+
+            foreach (UserPublic p in userPublicQueryable)
+            {
+                Console.WriteLine("\tRead {0}", p);
+            }
 
             if (userPublicQueryable.Count() == 1)
                 userPublic = userPublicQueryable.First();
@@ -144,7 +154,7 @@ namespace whoshomemobile
         private static bool UsernameExists(string username)
         {
             IQueryable<UserPublic> userPublicQueryable = _documentClient.CreateDocumentQuery<UserPublic>(
-                PublicUsersCollectionUri);//.Where(f => f.Id == username);
+                PublicUsersCollectionUri).Where(f => f.Id == username);
 
             return (userPublicQueryable.Count() != 0);
         }
@@ -283,7 +293,7 @@ namespace whoshomemobile
         public string PiID { get; set; }
         [JsonProperty(PropertyName = "authorizedPiList")]
         public List<string> AuthorizedPiList = new List<string>();
-        [JsonProperty(PropertyName = "authorizedPiList")]
+        [JsonProperty(PropertyName = "scanRequestPiList")]
         public List<string> ScanRequestList = new List<string>();
 
         public override string ToString()
