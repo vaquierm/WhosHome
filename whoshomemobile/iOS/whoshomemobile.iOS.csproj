@@ -1,5 +1,8 @@
 ﻿<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup>
+    <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <RuntimeIdentifiers>mac;mac-x86;mac-x64</RuntimeIdentifiers>
+    <NuGetRuntimeIdentifier>mac</NuGetRuntimeIdentifier>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">iPhoneSimulator</Platform>
     <ProjectGuid>{8B245C01-1953-4072-8B8A-838B921AD230}</ProjectGuid>
@@ -11,6 +14,8 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <RuntimeIdentifiers>mac;mac-x86;mac-x64</RuntimeIdentifiers>
+    <NuGetRuntimeIdentifier>mac</NuGetRuntimeIdentifier>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -30,6 +35,8 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <RuntimeIdentifiers>mac;mac-x86;mac-x64</RuntimeIdentifiers>
+    <NuGetRuntimeIdentifier>mac</NuGetRuntimeIdentifier>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\iPhone\Release</OutputPath>
@@ -45,6 +52,8 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <RuntimeIdentifiers>mac;mac-x86;mac-x64</RuntimeIdentifiers>
+    <NuGetRuntimeIdentifier>mac</NuGetRuntimeIdentifier>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\iPhoneSimulator\Release</OutputPath>
@@ -59,6 +68,8 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <RuntimeIdentifiers>mac;mac-x86;mac-x64</RuntimeIdentifiers>
+    <NuGetRuntimeIdentifier>mac</NuGetRuntimeIdentifier>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -84,33 +95,23 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.iOS" />
-    <Reference Include="Microsoft.Azure.Devices">
-      <HintPath>..\packages\Microsoft.Azure.Devices.1.16.0\lib\netstandard2.0\Microsoft.Azure.Devices.dll</HintPath>
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="Microsoft.Azure.DocumentDB.Core">
+      <HintPath>..\packages\Microsoft.Azure.DocumentDB.Core.1.9.1\lib\netstandard1.6\Microsoft.Azure.DocumentDB.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Azure.Amqp">
+      <HintPath>..\packages\Microsoft.Azure.Amqp.2.2.0\lib\netstandard1.3\Microsoft.Azure.Amqp.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\netstandard1.3\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Azure.Devices.Shared">
       <HintPath>..\packages\Microsoft.Azure.Devices.Shared.1.15.0\lib\netstandard2.0\Microsoft.Azure.Devices.Shared.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Azure.Documents.Client">
-      <HintPath>..\packages\Microsoft.Azure.DocumentDB.1.22.0\lib\net45\Microsoft.Azure.Documents.Client.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Security.Principal.Windows">
-      <HintPath>..\packages\System.Security.Principal.Windows.4.5.0\lib\netstandard2.0\System.Security.Principal.Windows.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Security.AccessControl">
-      <HintPath>..\packages\System.Security.AccessControl.4.5.0\lib\netstandard2.0\System.Security.AccessControl.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Security.Permissions">
-      <HintPath>..\packages\System.Security.Permissions.4.5.0\lib\netstandard2.0\System.Security.Permissions.dll</HintPath>
-    </Reference>
-    <Reference Include="MonoTouch.Dialog-1" />
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Azure.Amqp">
-      <HintPath>..\packages\Microsoft.Azure.Amqp.2.3.2\lib\netstandard1.3\Microsoft.Azure.Amqp.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Configuration.ConfigurationManager">
-      <HintPath>..\packages\System.Configuration.ConfigurationManager.4.5.0\lib\netstandard2.0\System.Configuration.ConfigurationManager.dll</HintPath>
+    <Reference Include="Microsoft.Azure.Devices">
+      <HintPath>..\packages\Microsoft.Azure.Devices.1.16.0\lib\netstandard2.0\Microsoft.Azure.Devices.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

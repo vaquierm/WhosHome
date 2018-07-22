@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Net.NetworkInformation;
 
-namespace whoshomemobile.iOS
+namespace whoshomemobile
 {
     public class SignInManager
     {
@@ -29,7 +29,7 @@ namespace whoshomemobile.iOS
 
         internal static void InitSignInManager()
         {
-            //_documentClient = new DocumentClient(new Uri(Authentification.DBEndpointUri), Authentification.DBKey);
+            _documentClient = new DocumentClient(new Uri(Authentification.DBEndpointUri), Authentification.DBKey);
             PublicUsersCollectionUri = UriFactory.CreateDocumentCollectionUri("whoshome", "UsersPublic");
             PrivateUsersCollectionUri = UriFactory.CreateDocumentCollectionUri("whoshome", "UsersPrivate");
         }
@@ -88,7 +88,7 @@ namespace whoshomemobile.iOS
             userPublic = uPublic;
             userPrivate = uPrivate;
 
-            statusMessage = $"User '{username}' has been registered successfully.";
+            statusMessage = $"User '{username}' has been registered successsfully.";
             return true;
         }
 
@@ -144,7 +144,7 @@ namespace whoshomemobile.iOS
         private static bool UsernameExists(string username)
         {
             IQueryable<UserPublic> userPublicQueryable = _documentClient.CreateDocumentQuery<UserPublic>(
-                PublicUsersCollectionUri).Where(f => f.Id == username);
+                PublicUsersCollectionUri);//.Where(f => f.Id == username);
 
             return (userPublicQueryable.Count() != 0);
         }

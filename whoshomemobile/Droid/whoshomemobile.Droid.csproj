@@ -44,29 +44,20 @@
     <Reference Include="Mono.Android" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.Net.Http" />
-    <Reference Include="Microsoft.Azure.Devices.Shared">
-      <HintPath>..\packages\Microsoft.Azure.Devices.Shared.1.15.0\lib\netstandard2.0\Microsoft.Azure.Devices.Shared.dll</HintPath>
+    <Reference Include="Microsoft.Azure.Amqp">
+      <HintPath>..\packages\Microsoft.Azure.Amqp.2.2.0\lib\monoandroid\Microsoft.Azure.Amqp.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Azure.Devices">
       <HintPath>..\packages\Microsoft.Azure.Devices.1.16.0\lib\netstandard2.0\Microsoft.Azure.Devices.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Azure.Documents.Client">
-      <HintPath>..\packages\Microsoft.Azure.DocumentDB.1.22.0\lib\net45\Microsoft.Azure.Documents.Client.dll</HintPath>
+    <Reference Include="Microsoft.Azure.Devices.Shared">
+      <HintPath>..\packages\Microsoft.Azure.Devices.Shared.1.15.0\lib\netstandard2.0\Microsoft.Azure.Devices.Shared.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Azure.DocumentDB.Core">
+      <HintPath>..\packages\Microsoft.Azure.DocumentDB.Core.1.9.1\lib\netstandard1.6\Microsoft.Azure.DocumentDB.Core.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\netstandard2.0\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Azure.Amqp">
-      <HintPath>..\packages\Microsoft.Azure.Amqp.2.3.2\lib\monoandroid\Microsoft.Azure.Amqp.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Security.AccessControl">
-      <HintPath>..\packages\System.Security.AccessControl.4.5.0\lib\netstandard2.0\System.Security.AccessControl.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Security.Permissions">
-      <HintPath>..\packages\System.Security.Permissions.4.5.0\lib\netstandard2.0\System.Security.Permissions.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Security.Principal.Windows">
-      <HintPath>..\packages\System.Security.Principal.Windows.4.5.0\lib\netstandard2.0\System.Security.Principal.Windows.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\netstandard1.3\Newtonsoft.Json.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
