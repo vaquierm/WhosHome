@@ -15,6 +15,26 @@ namespace whoshomemobile
         private static DocumentClient _documentClient;
         private static Uri PublicUsersCollectionUri;
         private static Uri PrivateUsersCollectionUri;
+        private static Uri PublicUserDocumentUri
+        {
+            get
+            {
+                if (userPublic == null)
+                    return null;
+                else
+                    return UriFactory.CreateDocumentUri(Authentification.DatabaseName, Authentification.PublicUserCollectionName, userPublic.Id);
+            }
+        }
+        private static Uri PrivateUserDocumentUri
+        {
+            get
+            {
+                if (userPrivate == null)
+                    return null;
+                else
+                    return UriFactory.CreateDocumentUri(Authentification.DatabaseName, Authentification.PrivateUsersCollectionName, userPrivate.Id);
+            }
+        }
 
         public static bool LogedIn {
             get
@@ -29,8 +49,8 @@ namespace whoshomemobile
         internal static void InitSignInManager()
         {
             _documentClient = new DocumentClient(new Uri(Authentification.DBEndpointUri), Authentification.DBKey);
-            PublicUsersCollectionUri = UriFactory.CreateDocumentCollectionUri("whoshome", "UsersPublic");
-            PrivateUsersCollectionUri = UriFactory.CreateDocumentCollectionUri("whoshome", "UsersPrivate");
+            PublicUsersCollectionUri = UriFactory.CreateDocumentCollectionUri(Authentification.DatabaseName, Authentification.PublicUserCollectionName);
+            PrivateUsersCollectionUri = UriFactory.CreateDocumentCollectionUri(Authentification.DatabaseName, Authentification.PrivateUsersCollectionName);
         }
 
         public static List<UserPublic> GetAllUsers()
@@ -93,6 +113,45 @@ namespace whoshomemobile
             userPrivate = uPrivate;
 
             statusMessage = $"User '{username}' has been registered successsfully.";
+            return true;
+        }
+
+        public static bool UpdateUserPublic(InputType type, out string ErrorMessage) {
+            Uri documentUri = PublicUserDocumentUri;
+            if (documentUri == null)
+            {
+                ErrorMessage = StringConstants.UserDataNotLoadedErrorMessage;
+                return false;
+            }
+
+            if (type == InputType.MacAddress && !InputValidation.ValidateMacAddress(userPublic.MacAddress, out ErrorMessage)) 
+            {
+                return false;
+            }
+
+            _documentClient.ReplaceDocumentAsync(documentUri, userPublic);
+
+            ErrorMessage = $"{type} {StringConstants.UpdatedSuccessfullyMessage}";
+            return true;
+        }
+
+        public static bool UpdateUserPrivate(InputType type, out string ErrorMessage)
+        {
+            Uri documentUri = PrivateUserDocumentUri;
+            if (documentUri == null)
+            {
+                ErrorMessage = StringConstants.UserDataNotLoadedErrorMessage;
+                return false;
+            }
+
+            if (type == InputType.Password && !InputValidation.ValidatePassword(userPrivate.Password, out ErrorMessage))
+            {
+                return false;
+            }
+
+            _documentClient.ReplaceDocumentAsync(documentUri, userPrivate);
+
+            ErrorMessage = $"{type} {StringConstants.UpdatedSuccessfullyMessage}";
             return true;
         }
 
@@ -228,7 +287,8 @@ namespace whoshomemobile
                 return false;
             }
 
-            input = input.Trim(' ', ':');
+            input = input.Trim(' ');
+            input = input.Replace(":", string.Empty);
 
             Regex r = new Regex("^([:xdigit:]){12}$");
 

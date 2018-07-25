@@ -95,6 +95,8 @@ namespace whoshomemobile.iOS
             MacAddressTextBox.Text = _userPublic.MacAddress;
             PiIDTextBox.Text = _userPrivate.PiID;
 
+            _informationLabelMessage = StringConstants.EditInformationMessage;
+
             if (TextBoxes == null)
             {
                 TextBoxes = new Dictionary<InputType, UITextField>();
@@ -145,18 +147,23 @@ namespace whoshomemobile.iOS
             }
             else
             {
-                string messgae;
-                InformationLabel.TextColor = UIColor.Red;
-                if (InputValidation.ValidatePassword(PasswordTextBox.Text, out messgae))
-                {
-                    messgae = StringConstants.PasswordChangedMessage;
-                    _userPrivate.Password = UsernameTextBox.Text;
-                    //Push to database
+                string oldPassword = _userPrivate.Password;
+                _userPrivate.Password = PasswordTextBox.Text;
 
-                    InformationLabel.TextColor = UIColor.DarkGray;
-                    DoneEditing(InputType.Password);
+                string message;
+
+                InformationLabel.TextColor = UIColor.DarkGray;
+                if (!SignInManager.UpdateUserPrivate(InputType.Password, out message))
+                {
+                    InformationLabel.TextColor = UIColor.Red;
+                    _userPublic.FullName = oldPassword;
+                    _informationLabelMessage = message;
+                    return;
                 }
-                _informationLabelMessage = messgae;
+
+                _informationLabelMessage = message;
+
+                DoneEditing(InputType.Password);
             }
         }
 
@@ -174,8 +181,21 @@ namespace whoshomemobile.iOS
             }
             else
             {
+                string oldName = _userPublic.FullName;
                 _userPublic.FullName = FullNameTextBox.Text;
-                //Push to database
+
+                string message;
+
+                InformationLabel.TextColor = UIColor.DarkGray;
+                if (!SignInManager.UpdateUserPublic(InputType.FullName, out message))
+                {
+                    InformationLabel.TextColor = UIColor.Red;
+                    _userPublic.FullName = oldName;
+                    _informationLabelMessage = message;
+                    return;
+                }
+
+                _informationLabelMessage = message;
 
                 DoneEditing(InputType.FullName);
             }
@@ -195,8 +215,21 @@ namespace whoshomemobile.iOS
             }
             else
             {
+                string oldMac = _userPublic.MacAddress;
                 _userPublic.MacAddress = MacAddressTextBox.Text;
-                //Push to database
+
+                string message;
+
+                InformationLabel.TextColor = UIColor.DarkGray;
+                if (!SignInManager.UpdateUserPublic(InputType.MacAddress, out message))
+                {
+                    InformationLabel.TextColor = UIColor.Red;
+                    _userPublic.MacAddress = oldMac;
+                    _informationLabelMessage = message;
+                    return;
+                }
+
+                _informationLabelMessage = message;
 
                 DoneEditing(InputType.MacAddress);
             }
@@ -221,6 +254,8 @@ namespace whoshomemobile.iOS
 
         private void DoneEditing(InputType inputType)
         {
+            InformationLabel.TextColor = UIColor.DarkGray;
+            _informationLabelMessage = StringConstants.EditInformationMessage;
             TextBoxes[inputType].Enabled = false;
             CancelButtons[inputType].Hidden = true;
             ActionButtons[inputType].SetTitle(StringConstants.EditString, UIControlState.Normal);
