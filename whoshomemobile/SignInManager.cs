@@ -43,34 +43,28 @@ namespace whoshomemobile
 
         public static bool LogIn(string username, string password, out string statusMessage) {
             IQueryable<UserPrivate> userPrivateQueryable = _documentClient.CreateDocumentQuery<UserPrivate>(
-                PublicUsersCollectionUri);//.Where(f => f.Id == username && f.Password == password);
-
-            foreach (UserPrivate p in userPrivateQueryable)
-            {
-                Console.WriteLine("\tRead {0}", p);
-            }
-
-            int count = userPrivateQueryable.Count();
+                PrivateUsersCollectionUri).Where(f => f.Id == username && f.Password == password);
+            
             if (userPrivateQueryable.Count() != 1)
             {
                 statusMessage = "Log in failed! Username or password is incorrect.";
                 return false;
             }
 
-            statusMessage = $"Logged in as '{username}'";
-
-            userPrivate = userPrivateQueryable.First();
-
-            IQueryable<UserPublic> userPublicQueryable = _documentClient.CreateDocumentQuery<UserPublic>(
-                PublicUsersCollectionUri);//.Where(f => f.Id == username);
-
-            foreach (UserPublic p in userPublicQueryable)
+            foreach(UserPrivate user in userPrivateQueryable)
             {
-                Console.WriteLine("\tRead {0}", p);
+                userPrivate = user;
             }
 
-            if (userPublicQueryable.Count() == 1)
-                userPublic = userPublicQueryable.First();
+            statusMessage = $"Logged in as '{username}'";
+
+            IQueryable<UserPublic> userPublicQueryable = _documentClient.CreateDocumentQuery<UserPublic>(
+                PublicUsersCollectionUri).Where(f => f.Id == username);
+            
+            foreach (UserPublic user in userPublicQueryable)
+            {
+                userPublic = user;
+            }
 
             return true;
         }
@@ -278,16 +272,22 @@ namespace whoshomemobile
 
     public class UserPrivate
     {
-        public UserPrivate(string username, string password, string piID)
+        public UserPrivate(string username, string password, string piID, List<string> authorizedPiList = null, List<string> scanRequestList = null)
         {
             Id = username;
             Password = password;
             PiID = piID;
+
+            if (authorizedPiList != null)
+                AuthorizedPiList = authorizedPiList;
+
+            if (scanRequestList != null)
+                ScanRequestList = scanRequestList;
         }
 
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
-        [JsonProperty(PropertyName = "password")]
+        [JsonProperty(PropertyName = "pwassord")]
         public string Password { get; set; }
         [JsonProperty(PropertyName = "piID")]
         public string PiID { get; set; }
