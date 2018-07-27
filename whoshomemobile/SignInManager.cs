@@ -361,4 +361,63 @@ namespace whoshomemobile
             return JsonConvert.SerializeObject(this);
         }
     }
+
+    public class ScanRequest
+    {
+        public ScanRequest(string usernameRequester, string fullNameRequester)
+        {
+            UsernameRequester = usernameRequester;
+            FullNameRequester = fullNameRequester;
+        }
+
+        [JsonProperty(PropertyName = "usernameRequester")]
+        public string UsernameRequester { get; set; }
+        [JsonProperty(PropertyName = "fullNameRequester")]
+        public string FullNameRequester { get; set; }
+
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
+    }
+
+    public class AuthorizedPi
+    {
+        public AuthorizedPi(string piID, string fullNameOwner, string preferedPiName = null)
+        {
+            PiID = piID;
+            FullNameOwner = fullNameOwner;
+            PreferedPiName = preferedPiName;
+        }
+
+        [JsonProperty(PropertyName = "piID")]
+        public string PiID { get; set; }
+        [JsonProperty(PropertyName = "fullNameOwner")]
+        public string FullNameOwner { get; set; }
+        [JsonProperty(PropertyName = "preferedPiName")]
+        public string PreferedPiName
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_preferedPiName))
+                    return $"{FullNameOwner}'s Home ({PiID})";
+                else
+                    return _preferedPiName;
+            }
+            set
+            {
+                if (!string.IsNullOrEmpty(value))
+                    _preferedPiName = $"{value} ({PiID})";
+                
+            }
+        }
+        [JsonIgnore]
+        private string _preferedPiName = null;
+
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
+
+    }
 }
