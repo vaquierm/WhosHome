@@ -6,11 +6,11 @@ namespace whoshomemobile.iOS
 {
     public class PiIDPickerModel : UIPickerViewModel
     {
-        public List<string> PiIDs = new List<string>();
+        public List<AuthorizedPi> AuthorizedPis = new List<AuthorizedPi>();
 
         private UILabel InformationLabel;
 
-        public string SelectedPiID = null;
+        public AuthorizedPi SelectedPi = null;
 
         public PiIDPickerModel(UILabel informationLabel)
         {
@@ -24,19 +24,19 @@ namespace whoshomemobile.iOS
 
         public override nint GetRowsInComponent(UIPickerView pickerView, nint component)
         {
-            return PiIDs.Count;
+            return AuthorizedPis.Count;
         }
 
         public override string GetTitle(UIPickerView pickerView, nint row, nint component)
         {
-            return PiIDs[(int) row];
+            return AuthorizedPis[(int) row].PreferedPiName;
         }
 
         public override void Selected(UIPickerView pickerView, nint row, nint component)
         {
-            SelectedPiID = PiIDs[(int)pickerView.SelectedRowInComponent(0)];
+            SelectedPi = AuthorizedPis[(int)pickerView.SelectedRowInComponent(0)];
             InformationLabel.TextColor = UIColor.DarkGray;
-            InformationLabel.Text = $"Scan the Pi '{PiIDs[(int) pickerView.SelectedRowInComponent(0)]}' and find out who is home!";
+            InformationLabel.Text = $"Scan '{AuthorizedPis[(int) pickerView.SelectedRowInComponent(0)].PreferedPiName}' and find out who is home!";
         }
 
         public override nfloat GetComponentWidth(UIPickerView picker, nint component)

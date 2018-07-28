@@ -71,18 +71,6 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pi ID" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="709" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
-                                <rect key="frame" x="78" y="451" width="42" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="710" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
-                                <rect key="frame" x="76" y="480" width="259" height="30"/>
-                                <nil key="textColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="711" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
                                 <rect key="frame" x="170" y="527" width="70" height="40"/>
                                 <state key="normal" title="Sign In"/>
@@ -101,13 +89,11 @@
                         <outlet property="PasswordTextBox" destination="704" id="name-outlet-704"/>
                         <outlet property="FullNameTextBox" destination="706" id="name-outlet-706"/>
                         <outlet property="MacAddressTextBox" destination="708" id="name-outlet-708"/>
-                        <outlet property="PiIDTextBox" destination="710" id="name-outlet-710"/>
                         <outlet property="ReadyButton" destination="711" id="name-outlet-711"/>
                         <outlet property="InformationLabel" destination="719" id="name-outlet-719"/>
                         <outlet property="ActionControl" destination="696" id="name-outlet-696"/>
                         <outlet property="FullNameLabel" destination="705" id="name-outlet-705"/>
                         <outlet property="MacAddressLabel" destination="707" id="name-outlet-707"/>
-                        <outlet property="PiIDLabel" destination="709" id="name-outlet-709"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="480" userLabel="First Responder" sceneMemberID="firstResponder"/>

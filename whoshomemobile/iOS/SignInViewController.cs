@@ -47,14 +47,6 @@ namespace whoshomemobile.iOS
             }
         }
 
-        private string _piID
-        {
-            get
-            {
-                return PiIDTextBox.Text;
-            }
-        }
-
         private string _message
         {
             get
@@ -98,10 +90,8 @@ namespace whoshomemobile.iOS
                 ReadyButton.SetTitle(StringConstants.SignInString, UIControlState.Normal);
                 MacAddressTextBox.Hidden = true;
                 FullNameTextBox.Hidden = true;
-                PiIDTextBox.Hidden = true;
                 MacAddressLabel.Hidden = true;
                 FullNameLabel.Hidden = true;
-                PiIDLabel.Hidden = true;
             }
             else 
             {
@@ -109,10 +99,8 @@ namespace whoshomemobile.iOS
                 ReadyButton.SetTitle(StringConstants.RegisterString, UIControlState.Normal);
                 MacAddressTextBox.Hidden = false;
                 FullNameTextBox.Hidden = false;
-                PiIDTextBox.Hidden = false;
                 MacAddressLabel.Hidden = false;
                 FullNameLabel.Hidden = false;
-                PiIDLabel.Hidden = false;
             }
         }
 
@@ -135,7 +123,7 @@ namespace whoshomemobile.iOS
             }
             else
             {
-                if (!SignInManager.Register(_username, _password, _fullName, _macAddress, out message, _piID))
+                if (!SignInManager.Register(_username, _password, _fullName, _macAddress, out message))
                 {
                     InformationLabel.TextColor = UIColor.Red;
                     _message = message;

@@ -44,14 +44,6 @@ namespace whoshomemobile.iOS
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UILabel PiIDLabel { get; set; }
-
-        [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UITextField PiIDTextBox { get; set; }
-
-        [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIButton ReadyButton { get; set; }
 
         [Outlet]
@@ -97,16 +89,6 @@ namespace whoshomemobile.iOS
             if (PasswordTextBox != null) {
                 PasswordTextBox.Dispose ();
                 PasswordTextBox = null;
-            }
-
-            if (PiIDLabel != null) {
-                PiIDLabel.Dispose ();
-                PiIDLabel = null;
-            }
-
-            if (PiIDTextBox != null) {
-                PiIDTextBox.Dispose ();
-                PiIDTextBox = null;
             }
 
             if (ReadyButton != null) {

@@ -14,8 +14,8 @@ namespace whoshomemobile
         public const string RegisterMessage = "Register to Who's Home";
         public const string EditInformationMessage = "Edit your user profile information";
 
-        public const string PasswordChangedMessage = "Password changed successfully";
         public const string UpdatedSuccessfullyMessage = "updated successfully!";
+        public const string MacAddressAlreadyExistsMessage = "This Mac Address already exists in our databases";
 
         public const string AddYourFriendsMessage = "Contribute to the database of mac addresses by adding your friends and family to be able to see if they are home";
         public const string PermissionMessage = "Ask your friends for permission to scan their homes and find out if you're left out from a party";

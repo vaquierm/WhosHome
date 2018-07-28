@@ -56,7 +56,7 @@ namespace whoshomemobile.iOS
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UITextField PiIDTextBox { get; set; }
+        UIKit.UITextField PiConnectionStringTextBox { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
@@ -118,9 +118,9 @@ namespace whoshomemobile.iOS
                 PasswordTextBox = null;
             }
 
-            if (PiIDTextBox != null) {
-                PiIDTextBox.Dispose ();
-                PiIDTextBox = null;
+            if (PiConnectionStringTextBox != null) {
+                PiConnectionStringTextBox.Dispose ();
+                PiConnectionStringTextBox = null;
             }
 
             if (SignOutButton != null) {

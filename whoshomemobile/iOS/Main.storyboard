@@ -77,8 +77,8 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="525" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES" text="Pi ID">
-                                <rect key="frame" x="70" y="534" width="42" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="525" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES" text="Pi ConnectionString">
+                                <rect key="frame" x="70" y="534" width="162" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -125,7 +125,7 @@
                         <outlet property="PasswordTextBox" destination="500" id="name-outlet-500"/>
                         <outlet property="FullNameTextBox" destination="501" id="name-outlet-501"/>
                         <outlet property="MacAddressTextBox" destination="502" id="name-outlet-502"/>
-                        <outlet property="PiIDTextBox" destination="503" id="name-outlet-503"/>
+                        <outlet property="PiConnectionStringTextBox" destination="503" id="name-outlet-503"/>
                         <outlet property="PasswordActionButton" destination="527" id="name-outlet-527"/>
                         <outlet property="FullNameActionButton" destination="528" id="name-outlet-528"/>
                         <outlet property="MacAddressActionButton" destination="530" id="name-outlet-530"/>
@@ -277,8 +277,8 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="3287" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES" text="Pi ID">
-                                <rect key="frame" x="78" y="539" width="50" height="35"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="3287" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES" text="Username">
+                                <rect key="frame" x="78" y="539" width="81" height="35"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>

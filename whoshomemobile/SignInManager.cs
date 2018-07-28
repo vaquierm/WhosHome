@@ -89,22 +89,26 @@ namespace whoshomemobile
             return true;
         }
 
-        public static bool Register(string username, string password, string fullName, string macAddress, out string statusMessage, string piID)
+        public static bool Register(string username, string password, string fullName, string macAddress, out string statusMessage)
         {
             UserPublic uPublic = new UserPublic(username, fullName, macAddress);
-            UserPrivate uPrivate = new UserPrivate(username, password, piID);
+            UserPrivate uPrivate = new UserPrivate(username, password);
 
             if (UsernameExists(username))
             {
                 statusMessage = $"The username '{username}' is already taken.";
                 return false;
             }
-            else if (PiIDExists(piID))
-            {
-                statusMessage = $"The Pi ID '{piID}' is already taken.";
-            }
             if (!InputValidation.ValidatePassword(password, out statusMessage))
                 return false;
+
+            if (!InputValidation.ValidateMacAddress(macAddress, out statusMessage))
+            {
+                if (statusMessage != StringConstants.MacAddressAlreadyExistsMessage)
+                {
+                    return false;
+                }
+            }
 
             _documentClient.CreateDocumentAsync(PublicUsersCollectionUri, uPublic);
             _documentClient.CreateDocumentAsync(PrivateUsersCollectionUri, uPrivate);
@@ -170,16 +174,16 @@ namespace whoshomemobile
             return true;
         }
 
-        public static bool RequestPermission(string piID, out string ErrorMessage)
+        public static bool RequestPermission(string userToRequest, out string ErrorMessage)
         {
-            if (!PiIDExists(piID))
+            if (!UsernameExists(userToRequest))
             {
-                ErrorMessage = $"You cannot request the permission to scan '{piID}' because it does not exist...";
+                ErrorMessage = $"You cannot request the permission to scan {userToRequest}'s house because this user does not exist...";
                 return false;
             }
 
             //TODO: get the user with this pi ID and add yourself to the request list and push to database
-            ErrorMessage = $"A request was sent to scan the pi '{piID}'!";
+            ErrorMessage = $"A request was sent to scan the user {userToRequest}!";
             return true;
         }
 
@@ -212,13 +216,14 @@ namespace whoshomemobile
             return (userPublicQueryable.Count() != 0);
         }
 
-        private static bool PiIDExists(string piID)
+        public static bool MacAddressExists(string macAddress)
         {
-            IQueryable<UserPrivate> userPrivateQueryable = _documentClient.CreateDocumentQuery<UserPrivate>(
-                PrivateUsersCollectionUri).Where(f => f.PiID == piID);
+            IQueryable<UserPublic> userPublicQueryable = _documentClient.CreateDocumentQuery<UserPublic>(
+                PublicUsersCollectionUri).Where(f => f.MacAddress == macAddress);
 
-            return (userPrivateQueryable.Count() != 0);
+            return (userPublicQueryable.Count() != 0);
         }
+
     }
 
     public class InputValidation
@@ -288,14 +293,18 @@ namespace whoshomemobile
             }
 
             input = input.Trim(' ');
-            input = input.Replace(":", string.Empty);
 
-            Regex r = new Regex("^([:xdigit:]){12}$");
+            Regex r = new Regex("^[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}$");
 
 
             if (r.IsMatch(input))
             {
-                //TODO : check in database if it is unique
+                if (SignInManager.MacAddressExists(address))
+                {
+                    ErrorMessage = StringConstants.MacAddressAlreadyExistsMessage;
+                    return false;
+                }
+
                 ErrorMessage = "Mac Address is valid";
                 return true;
             }
@@ -323,6 +332,10 @@ namespace whoshomemobile
         public string FullName { get; set; }
         [JsonProperty(PropertyName = "macAddress")]
         public string MacAddress { get; set; }
+        [JsonProperty(PropertyName = "authorizedPiList")]
+        public List<AuthorizedPi> AuthorizedPiList = new List<AuthorizedPi>();
+        [JsonProperty(PropertyName = "scanRequestList")]
+        public List<ScanRequest> ScanRequestList = new List<ScanRequest>();
 
         public override string ToString()
         {
@@ -332,29 +345,29 @@ namespace whoshomemobile
 
     public class UserPrivate
     {
-        public UserPrivate(string username, string password, string piID, List<string> authorizedPiList = null, List<string> scanRequestList = null)
+        public UserPrivate(string username, string password)
         {
             Id = username;
             Password = password;
-            PiID = piID;
-
-            if (authorizedPiList != null)
-                AuthorizedPiList = authorizedPiList;
-
-            if (scanRequestList != null)
-                ScanRequestList = scanRequestList;
         }
 
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
         [JsonProperty(PropertyName = "pwassord")]
         public string Password { get; set; }
-        [JsonProperty(PropertyName = "piID")]
-        public string PiID { get; set; }
-        [JsonProperty(PropertyName = "authorizedPiList")]
-        public List<string> AuthorizedPiList = new List<string>();
-        [JsonProperty(PropertyName = "scanRequestPiList")]
-        public List<string> ScanRequestList = new List<string>();
+        [JsonIgnore]
+        public string PiConnectionString
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_piConnectionString))
+                    _piConnectionString = IoTClientManager.GetPiConnectionString(Id);
+
+                return _piConnectionString;
+            }
+        }
+        [JsonIgnore]
+        private string _piConnectionString = null;
 
         public override string ToString()
         {

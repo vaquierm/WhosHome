@@ -93,18 +93,16 @@ namespace whoshomemobile.iOS
             PasswordTextBox.Text = _userPrivate.Password;
             FullNameTextBox.Text = _userPublic.FullName;
             MacAddressTextBox.Text = _userPublic.MacAddress;
-            PiIDTextBox.Text = _userPrivate.PiID;
+            PiConnectionStringTextBox.Text = IoTClientManager.GetPiConnectionString(_userPublic.Id);
 
             _informationLabelMessage = StringConstants.EditInformationMessage;
 
             if (TextBoxes == null)
             {
                 TextBoxes = new Dictionary<InputType, UITextField>();
-                TextBoxes[InputType.Username] = UsernameTextBox;
                 TextBoxes[InputType.Password] = PasswordTextBox;
                 TextBoxes[InputType.FullName] = FullNameTextBox;
                 TextBoxes[InputType.MacAddress] = MacAddressTextBox;
-                TextBoxes[InputType.PiID] = PiIDTextBox;
             }
             if (ActionButtons == null)
             {

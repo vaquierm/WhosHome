@@ -7,11 +7,11 @@ namespace whoshomemobile.iOS
     public partial class ScanViewController : UIViewController
     {
 
-        private UserPrivate _userPrivate
+        private UserPublic _userPublic
         {
             get
             {
-                return SignInManager.userPrivate;
+                return SignInManager.userPublic;
             }
         }
 
@@ -19,7 +19,7 @@ namespace whoshomemobile.iOS
         {
             get
             {
-                return _piIDPickerModel.SelectedPiID;
+                return _piIDPickerModel.SelectedPi.PiID;
             }
         }
 
@@ -48,8 +48,8 @@ namespace whoshomemobile.iOS
             // Perform any additional setup after loading the view, typically from a nib.
 
             _piIDPickerModel = new PiIDPickerModel(InformationLabel);
-            _piIDPickerModel.PiIDs.Add(_userPrivate.PiID);
-            _piIDPickerModel.PiIDs.AddRange(_userPrivate.AuthorizedPiList);
+            _piIDPickerModel.AuthorizedPis.Add(new AuthorizedPi(_userPublic.Id, _userPublic.FullName, "Home"));
+            _piIDPickerModel.AuthorizedPis.AddRange(_userPublic.AuthorizedPiList);
             PiIDDropBox.Model = _piIDPickerModel;
         }
 
