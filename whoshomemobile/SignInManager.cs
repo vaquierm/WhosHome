@@ -143,6 +143,31 @@ namespace whoshomemobile
 
             _documentClient.ReplaceDocumentAsync(documentUri, userPublic);
 
+            if (type == InputType.FullName)
+            {
+                IQueryable<UserPublic> userPublicQueryable = _documentClient.CreateDocumentQuery<UserPublic>(
+                    PublicUsersCollectionUri).SelectMany(u => u.AuthorizedPiList.Where(ap => ap.PiID == userPublic.Id).Select(ap => u));
+                
+                foreach (UserPublic user in userPublicQueryable)
+                {
+                    AuthorizedPi pi = user.AuthorizedPiList.Find(ap => ap.PiID == userPublic.Id);
+                    pi.FullNameOwner = userPublic.FullName;
+
+                    _documentClient.ReplaceDocumentAsync(PublicUserDocumentUri(user.Id), user);
+                }
+
+                userPublicQueryable = _documentClient.CreateDocumentQuery<UserPublic>(
+                    PublicUsersCollectionUri).SelectMany(u => u.ScanRequestList.Where(sr => sr.UsernameRequester == userPublic.Id).Select(sr => u));
+            
+                foreach (UserPublic user in userPublicQueryable)
+                {
+                    ScanRequest scanRequest = user.ScanRequestList.Find(sr => sr.UsernameRequester == userPublic.Id);
+                    scanRequest.FullNameRequester = userPublic.FullName;
+
+                    _documentClient.ReplaceDocumentAsync(PublicUserDocumentUri(user.Id), user);
+                }
+            }
+
             ErrorMessage = $"{type} {StringConstants.UpdatedSuccessfullyMessage}";
             return true;
         }
@@ -588,22 +613,22 @@ namespace whoshomemobile
         [JsonProperty(PropertyName = "fullNameOwner")]
         public string FullNameOwner { get; set; }
         [JsonProperty(PropertyName = "preferedPiName")]
-        public string PreferedPiName
+        private string PreferedPiName { get; set; }
+        [JsonIgnore]
+        public string PreferedPiNameString
         {
             get
             {
-                if (string.IsNullOrWhiteSpace(_preferedPiName))
+                if (string.IsNullOrWhiteSpace(PreferedPiName))
                     return $"{FullNameOwner}'s Home ({PiID})";
                 else
-                    return $"{_preferedPiName} ({PiID})";
+                    return $"{PreferedPiName} ({PiID})";
             }
             set
             {
-                _preferedPiName = value;
+                PreferedPiName = value;
             }
         }
-        [JsonIgnore]
-        private string _preferedPiName = null;
 
         public override string ToString()
         {

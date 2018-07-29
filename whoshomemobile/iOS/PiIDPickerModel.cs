@@ -29,14 +29,14 @@ namespace whoshomemobile.iOS
 
         public override string GetTitle(UIPickerView pickerView, nint row, nint component)
         {
-            return AuthorizedPis[(int) row].PreferedPiName;
+            return AuthorizedPis[(int) row].PreferedPiNameString;
         }
 
         public override void Selected(UIPickerView pickerView, nint row, nint component)
         {
             SelectedPi = AuthorizedPis[(int)pickerView.SelectedRowInComponent(0)];
             InformationLabel.TextColor = UIColor.DarkGray;
-            InformationLabel.Text = $"Scan {AuthorizedPis[(int) pickerView.SelectedRowInComponent(0)].PreferedPiName} and find out who is home!";
+            InformationLabel.Text = $"Scan {AuthorizedPis[(int) pickerView.SelectedRowInComponent(0)].PreferedPiNameString} and find out who is home!";
         }
 
         public override nfloat GetComponentWidth(UIPickerView picker, nint component)
