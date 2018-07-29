@@ -15,25 +15,23 @@ namespace whoshomemobile
         private static DocumentClient _documentClient;
         private static Uri PublicUsersCollectionUri;
         private static Uri PrivateUsersCollectionUri;
-        private static Uri PublicUserDocumentUri
+        private static Uri PublicUserDocumentUri(string documentId = null)
         {
-            get
-            {
-                if (userPublic == null)
-                    return null;
-                else
-                    return UriFactory.CreateDocumentUri(Authentification.DatabaseName, Authentification.PublicUserCollectionName, userPublic.Id);
-            }
+            if (documentId != null)
+                return UriFactory.CreateDocumentUri(Authentification.DatabaseName, Authentification.PublicUserCollectionName, documentId);
+            else if (userPublic == null)
+                return null;
+            else
+                return UriFactory.CreateDocumentUri(Authentification.DatabaseName, Authentification.PublicUserCollectionName, userPublic.Id);
         }
-        private static Uri PrivateUserDocumentUri
+        private static Uri PrivateUserDocumentUri(string documentId = null)
         {
-            get
-            {
-                if (userPrivate == null)
-                    return null;
-                else
-                    return UriFactory.CreateDocumentUri(Authentification.DatabaseName, Authentification.PrivateUsersCollectionName, userPrivate.Id);
-            }
+            if (documentId != null)
+                return UriFactory.CreateDocumentUri(Authentification.DatabaseName, Authentification.PrivateUsersCollectionName, documentId);
+            else if (userPrivate == null)
+                return null;
+            else
+                return UriFactory.CreateDocumentUri(Authentification.DatabaseName, Authentification.PrivateUsersCollectionName, userPrivate.Id);
         }
 
         public static bool LogedIn {
@@ -120,7 +118,7 @@ namespace whoshomemobile
             if (idToReplace == null)
                 _documentClient.CreateDocumentAsync(PublicUsersCollectionUri, uPublic);
             else
-                _documentClient.ReplaceDocumentAsync(UriFactory.CreateDocumentUri(Authentification.DatabaseName, Authentification.PublicUserCollectionName, idToReplace), uPublic);
+                _documentClient.ReplaceDocumentAsync(PublicUserDocumentUri(idToReplace), uPublic);
             _documentClient.CreateDocumentAsync(PrivateUsersCollectionUri, uPrivate);
 
             userPublic = uPublic;
@@ -131,7 +129,7 @@ namespace whoshomemobile
         }
 
         public static bool UpdateUserPublic(InputType type, out string ErrorMessage) {
-            Uri documentUri = PublicUserDocumentUri;
+            Uri documentUri = PublicUserDocumentUri();
             if (documentUri == null)
             {
                 ErrorMessage = StringConstants.UserDataNotLoadedErrorMessage;
@@ -151,7 +149,7 @@ namespace whoshomemobile
 
         public static bool UpdateUserPrivate(InputType type, out string ErrorMessage)
         {
-            Uri documentUri = PrivateUserDocumentUri;
+            Uri documentUri = PrivateUserDocumentUri();
             if (documentUri == null)
             {
                 ErrorMessage = StringConstants.UserDataNotLoadedErrorMessage;
@@ -183,16 +181,50 @@ namespace whoshomemobile
             return true;
         }
 
-        public static bool RequestPermission(string userToRequest, out string ErrorMessage)
+        public static bool RequestPermission(string userToRequestName, out string ErrorMessage)
         {
-            if (!UsernameExists(userToRequest))
+            IQueryable<UserPublic> userPublicQueryable = _documentClient.CreateDocumentQuery<UserPublic>(
+                PublicUsersCollectionUri).Where(f => f.Id == userToRequestName);
+            
+            if (userPublicQueryable.Count() == 0)
             {
-                ErrorMessage = $"You cannot request the permission to scan {userToRequest}'s house because this user does not exist...";
+                ErrorMessage = $"You cannot request the permission to scan {userToRequestName}'s house because this user does not exist...";
                 return false;
             }
 
-            //TODO: get the user with this pi ID and add yourself to the request list and push to database
-            ErrorMessage = $"A request was sent to scan the user {userToRequest}!";
+            UserPublic userToRequest = null;
+
+            foreach (UserPublic u in userPublicQueryable)
+            {
+                userToRequest = u;
+            }
+
+            if (userToRequest == null) {
+                ErrorMessage = StringConstants.SomethingWentWrongScanPermissionErrorMessage;
+                return false;
+            }
+
+            ScanRequest scanRequest = new ScanRequest(userPublic.Id, userPublic.FullName);
+
+            if (userToRequest.ScanRequestList.Any(u => u.UsernameRequester == userPublic.Id))
+            {
+                ErrorMessage = $"You have already requested {userToRequestName} to scan their home";
+                return false;
+            }
+
+            userToRequest.ScanRequestList.Add(scanRequest);
+
+            try
+            {
+                _documentClient.ReplaceDocumentAsync(PublicUserDocumentUri(userToRequestName), userToRequest);
+            }
+            catch
+            {
+                ErrorMessage = StringConstants.SomethingWentWrongScanPermissionErrorMessage;
+                return false;
+            }
+
+            ErrorMessage = $"A request was sent to {userToRequestName}!";
             return true;
         }
 

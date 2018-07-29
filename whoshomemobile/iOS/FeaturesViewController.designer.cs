@@ -40,7 +40,7 @@ namespace whoshomemobile.iOS
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UITextField PiIDTextBox { get; set; }
+        UIKit.UITextField UsernameTextBox { get; set; }
 
         void ReleaseDesignerOutlets ()
         {
@@ -74,9 +74,9 @@ namespace whoshomemobile.iOS
                 PermissionMessageBox = null;
             }
 
-            if (PiIDTextBox != null) {
-                PiIDTextBox.Dispose ();
-                PiIDTextBox = null;
+            if (UsernameTextBox != null) {
+                UsernameTextBox.Dispose ();
+                UsernameTextBox = null;
             }
         }
     }

@@ -303,7 +303,7 @@
                         <outlet property="AddButton" destination="3250" id="name-outlet-3250"/>
                         <outlet property="MacAddressMessageBox" destination="3245" id="name-outlet-3245"/>
                         <outlet property="PermissionMessageBox" destination="3286" id="name-outlet-3286"/>
-                        <outlet property="PiIDTextBox" destination="3288" id="name-outlet-3288"/>
+                        <outlet property="UsernameTextBox" destination="3288" id="name-outlet-3288"/>
                         <outlet property="PermissionButton" destination="3289" id="name-outlet-3289"/>
                     </connections>
                 </viewController>

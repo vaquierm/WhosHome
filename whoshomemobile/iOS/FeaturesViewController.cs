@@ -31,15 +31,15 @@ namespace whoshomemobile.iOS
             }
         }
 
-        private string _piID
+        private string _usernameToRequest
         {
             get
             {
-                return PiIDTextBox.Text;
+                return UsernameTextBox.Text;
             }
             set
             {
-                PiIDTextBox.Text = value;
+                UsernameTextBox.Text = value;
             }
         }
 
@@ -109,13 +109,13 @@ namespace whoshomemobile.iOS
         {
             string message;
             PermissionMessageBox.TextColor = UIColor.DarkGray;
-            if (!SignInManager.RequestPermission(_piID, out message))
+            if (!SignInManager.RequestPermission(_usernameToRequest, out message))
             {
                 PermissionMessageBox.TextColor = UIColor.Red;
             }
             else
             {
-                _piID = string.Empty;
+                _usernameToRequest = string.Empty;
             }
             _permissionMessage = message;
         }

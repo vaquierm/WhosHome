@@ -14,6 +14,8 @@ namespace whoshomemobile
         public const string RegisterMessage = "Register to Who's Home";
         public const string EditInformationMessage = "Edit your user profile information";
 
+        public const string SomethingWentWrongScanPermissionErrorMessage = "Something went wrong while requesting scan permission";
+
         public const string UpdatedSuccessfullyMessage = "updated successfully!";
         public const string MacAddressAlreadyExistsMessage = "This Mac Address already exists in our databases";
 
