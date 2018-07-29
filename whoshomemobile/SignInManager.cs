@@ -94,23 +94,33 @@ namespace whoshomemobile
             UserPublic uPublic = new UserPublic(username, fullName, macAddress);
             UserPrivate uPrivate = new UserPrivate(username, password);
 
-            if (UsernameExists(username))
-            {
-                statusMessage = $"The username '{username}' is already taken.";
+            if (!InputValidation.ValidateUsername(username, out statusMessage))
                 return false;
-            }
+           
             if (!InputValidation.ValidatePassword(password, out statusMessage))
                 return false;
 
+            string idToReplace = null;
             if (!InputValidation.ValidateMacAddress(macAddress, out statusMessage))
             {
                 if (statusMessage != StringConstants.MacAddressAlreadyExistsMessage)
                 {
                     return false;
                 }
+                if (IsActualUser(macAddress, out idToReplace))
+                    return false;
             }
 
-            _documentClient.CreateDocumentAsync(PublicUsersCollectionUri, uPublic);
+            if (string.IsNullOrWhiteSpace(fullName))
+            {
+                statusMessage = "Your full name cannot be empty";
+                return false;
+            }
+
+            if (idToReplace == null)
+                _documentClient.CreateDocumentAsync(PublicUsersCollectionUri, uPublic);
+            else
+                _documentClient.ReplaceDocumentAsync(UriFactory.CreateDocumentUri(Authentification.DatabaseName, Authentification.PublicUserCollectionName, idToReplace), uPublic);
             _documentClient.CreateDocumentAsync(PrivateUsersCollectionUri, uPrivate);
 
             userPublic = uPublic;
@@ -166,8 +176,7 @@ namespace whoshomemobile
                 return false;
             }
 
-            //TODO: generate an ID for this document
-            UserPublic newUser = new UserPublic("", fullName, macAddress);
+            UserPublicNoUserName newUser = new UserPublicNoUserName(fullName, macAddress);
             _documentClient.CreateDocumentAsync(PublicUsersCollectionUri, newUser);
 
             ErrorMessage = $"The mac address for {fullName} was added to the database.";
@@ -208,7 +217,7 @@ namespace whoshomemobile
             return macAddress;
         }
 
-        private static bool UsernameExists(string username)
+        public static bool UsernameExists(string username)
         {
             IQueryable<UserPublic> userPublicQueryable = _documentClient.CreateDocumentQuery<UserPublic>(
                 PublicUsersCollectionUri).Where(f => f.Id == username);
@@ -222,6 +231,28 @@ namespace whoshomemobile
                 PublicUsersCollectionUri).Where(f => f.MacAddress == macAddress);
 
             return (userPublicQueryable.Count() != 0);
+        }
+
+        public static bool IsActualUser(string macAddress, out string idToReplace)
+        {
+            idToReplace = null;
+
+            IQueryable<UserPublic> userPublicQueryable = _documentClient.CreateDocumentQuery<UserPublic>(
+                PublicUsersCollectionUri).Where(f => f.MacAddress == macAddress);
+
+            UserPublic user = null;
+
+            foreach (UserPublic u in userPublicQueryable)
+            {
+                user = u;
+            }
+
+            if (user == null)
+                return false;
+
+            idToReplace = user.Id;
+
+            return !InputValidation.IsGeneratedId(user.Id);
         }
 
     }
@@ -275,6 +306,28 @@ namespace whoshomemobile
             }
         }
 
+        public static bool ValidateUsername(string username, out string ErrorMessage)
+        {
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                ErrorMessage = "Your usernamecannotbe empty";
+                return false;
+            }
+            if (IsGeneratedId(username))
+            {
+                ErrorMessage = "Your username cannot cannot be of this format";
+                return false;
+            }
+            if (SignInManager.UsernameExists(username))
+            {
+                ErrorMessage = "This usernme is already taken";
+                return false;
+            }
+
+            ErrorMessage = "Username Valid";
+            return true;
+        }
+
         /// <summary>
         /// Validates the mac address.
         /// </summary>
@@ -314,20 +367,40 @@ namespace whoshomemobile
                 return false;
             }
         }
+
+        public static bool IsGeneratedId(string id)
+        {
+            Regex r = new Regex("^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$");
+
+            return r.IsMatch(id);
+        }
     }
 
 
-    public class UserPublic
+    public class UserPublic : UserPublicNoUserName
     {
-        public UserPublic(string username, string fullName, string macAddress)
+        public UserPublic(string username, string fullName, string macAddress) : base(fullName, macAddress)
         {
             Id = username;
-            FullName = fullName;
-            MacAddress = macAddress;
         }
 
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
+
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
+    }
+
+    public class UserPublicNoUserName
+    {
+        public UserPublicNoUserName(string fullName, string macAddress)
+        {
+            FullName = fullName;
+            MacAddress = macAddress;
+        }
+
         [JsonProperty(PropertyName = "fullName")]
         public string FullName { get; set; }
         [JsonProperty(PropertyName = "macAddress")]
