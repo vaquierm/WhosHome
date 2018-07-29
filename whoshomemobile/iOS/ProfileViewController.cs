@@ -154,7 +154,7 @@ namespace whoshomemobile.iOS
                 if (!SignInManager.UpdateUserPrivate(InputType.Password, out message))
                 {
                     InformationLabel.TextColor = UIColor.Red;
-                    _userPublic.FullName = oldPassword;
+                    _userPrivate.Password = oldPassword;
                     _informationLabelMessage = message;
                     return;
                 }
@@ -180,6 +180,14 @@ namespace whoshomemobile.iOS
             else
             {
                 string oldName = _userPublic.FullName;
+
+                if (string.IsNullOrWhiteSpace(FullNameTextBox.Text))
+                {
+                    InformationLabel.TextColor = UIColor.Red;
+                    _informationLabelMessage = StringConstants.FullNameCannotBeEmpty;
+                    return;
+                }
+
                 _userPublic.FullName = FullNameTextBox.Text;
 
                 string message;
