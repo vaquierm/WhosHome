@@ -183,6 +183,12 @@ namespace whoshomemobile
 
         public static bool RequestPermission(string userToRequestName, out string ErrorMessage)
         {
+            if (userPublic.AuthorizedPiList.Any(ap => ap.PiID == userToRequestName))
+            {
+                ErrorMessage = $"You already have permission to scan {userToRequestName}'s home";
+                return false;
+            }
+
             IQueryable<UserPublic> userPublicQueryable = _documentClient.CreateDocumentQuery<UserPublic>(
                 PublicUsersCollectionUri).Where(f => f.Id == userToRequestName);
             
@@ -227,6 +233,75 @@ namespace whoshomemobile
             ErrorMessage = $"A request was sent to {userToRequestName}!";
             return true;
         }
+
+        public static bool ProcessPermissionsToRequester(ScanRequest scanRequest, bool acceptRequest, bool updateOwnUser, out string ErrorMessage)
+        {
+            ErrorMessage = string.Empty;
+            if (!userPublic.ScanRequestList.Contains(scanRequest))
+            {
+                ErrorMessage = "This request does not exist";
+                return false;
+            }
+
+            bool returnStatus = true;
+            if (acceptRequest)
+            {
+                IQueryable<UserPublic> userPublicQueryable = _documentClient.CreateDocumentQuery<UserPublic>(
+                    PublicUsersCollectionUri).Where(f => f.Id == scanRequest.UsernameRequester);
+
+                do
+                {
+                    if (userPublicQueryable.Count() == 0)
+                    {
+                        ErrorMessage = $"Cannot find the user requesting permission";
+                        returnStatus = false;
+                        break;
+                    }
+
+                    UserPublic userRequesting = null;
+
+                    foreach (UserPublic u in userPublicQueryable)
+                    {
+                        userRequesting = u;
+                    }
+
+                    if (userRequesting.AuthorizedPiList.Any(ap => ap.PiID == userPublic.Id))
+                    {
+                        ErrorMessage = $"{userRequesting.Id} already has permission to scan your home";
+                        returnStatus = false;
+                        break;
+                    }
+
+                    AuthorizedPi authorization = new AuthorizedPi(userPublic.Id, userPublic.FullName, string.Empty);
+
+                    userRequesting.AuthorizedPiList.Add(authorization);
+
+                    _documentClient.ReplaceDocumentAsync(PublicUserDocumentUri(userRequesting.Id), userRequesting);
+                }
+                while(false);
+            }
+
+            userPublic.ScanRequestList.Remove(scanRequest);
+
+            if (updateOwnUser)
+                UpdateUserPublic(InputType.Username, out string message);
+
+            if (returnStatus == true)
+            {
+                switch (acceptRequest)
+                {
+                    case true:
+                        ErrorMessage = $"Successfully accepted {scanRequest.UsernameRequester}'s request";
+                        break;
+                    case false:
+                        ErrorMessage = $"Denied {scanRequest.UsernameRequester}'s request to scan your home";
+                        break;
+                }
+
+            }
+
+            return returnStatus;
+        }        
 
         public static string GetMacAddress()
         {
@@ -517,16 +592,14 @@ namespace whoshomemobile
         {
             get
             {
-                if (string.IsNullOrEmpty(_preferedPiName))
+                if (string.IsNullOrWhiteSpace(_preferedPiName))
                     return $"{FullNameOwner}'s Home ({PiID})";
                 else
-                    return _preferedPiName;
+                    return $"{_preferedPiName} ({PiID})";
             }
             set
             {
-                if (!string.IsNullOrEmpty(value))
-                    _preferedPiName = $"{value} ({PiID})";
-                
+                _preferedPiName = value;
             }
         }
         [JsonIgnore]

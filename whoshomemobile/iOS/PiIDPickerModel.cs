@@ -36,7 +36,7 @@ namespace whoshomemobile.iOS
         {
             SelectedPi = AuthorizedPis[(int)pickerView.SelectedRowInComponent(0)];
             InformationLabel.TextColor = UIColor.DarkGray;
-            InformationLabel.Text = $"Scan '{AuthorizedPis[(int) pickerView.SelectedRowInComponent(0)].PreferedPiName}' and find out who is home!";
+            InformationLabel.Text = $"Scan {AuthorizedPis[(int) pickerView.SelectedRowInComponent(0)].PreferedPiName} and find out who is home!";
         }
 
         public override nfloat GetComponentWidth(UIPickerView picker, nint component)

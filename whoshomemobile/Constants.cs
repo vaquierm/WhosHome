@@ -15,6 +15,8 @@ namespace whoshomemobile
         public const string EditInformationMessage = "Edit your user profile information";
 
         public const string SomethingWentWrongScanPermissionErrorMessage = "Something went wrong while requesting scan permission";
+        public const string WouldLikeToScanYourHomeMessage = "{0} ({1}) would like to scan your home.";
+        public const string ContinueToMainScreenMessage = "You have processed all your scan requests, continue to the main screen";
 
         public const string UpdatedSuccessfullyMessage = "updated successfully!";
         public const string MacAddressAlreadyExistsMessage = "This Mac Address already exists in our databases";

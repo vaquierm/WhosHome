@@ -129,6 +129,7 @@
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
     <InterfaceDefinition Include="Main.storyboard" />
     <InterfaceDefinition Include="SignIn.storyboard" />
+    <InterfaceDefinition Include="ScanRequests.storyboard" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -154,6 +155,10 @@
     <Compile Include="FeaturesViewController.cs" />
     <Compile Include="FeaturesViewController.designer.cs">
       <DependentUpon>FeaturesViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ScanRequestsViewController.cs" />
+    <Compile Include="ScanRequestsViewController.designer.cs">
+      <DependentUpon>ScanRequestsViewController.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <Import Project="..\whoshomemobile.projitems" Label="Shared" Condition="Exists('..\whoshomemobile.projitems')" />

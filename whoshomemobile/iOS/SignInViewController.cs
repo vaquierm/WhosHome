@@ -130,7 +130,10 @@ namespace whoshomemobile.iOS
                     return;
                 }
             }
-            AppDelegate.LoadStoryboard("Main");
+            if (SignInManager.userPublic.ScanRequestList.Count == 0)
+                AppDelegate.LoadStoryboard("Main");
+            else
+                AppDelegate.LoadStoryboard("ScanRequests");
         }
 
 
