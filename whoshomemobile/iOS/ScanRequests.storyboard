@@ -40,7 +40,7 @@
                                 <state key="normal" title="Accept"/>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="247" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
-                                <rect key="frame" x="229" y="395" width="46" height="30"/>
+                                <rect key="frame" x="258" y="395" width="46" height="30"/>
                                 <state key="normal" title="Deny"/>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="248" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">

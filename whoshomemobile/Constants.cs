@@ -16,6 +16,8 @@ namespace whoshomemobile
 
         public const string SomethingWentWrongScanPermissionErrorMessage = "Something went wrong while requesting scan permission";
         public const string WouldLikeToScanYourHomeMessage = "{0} ({1}) would like to scan your home.";
+        public const string RenamePiMessage = "Rename {0}";
+        public const string NewPiNameCannotBeEmptyErrorMessage = "Name new name for {0} cannot be empty";
         public const string ContinueToMainScreenMessage = "You have processed all your scan requests, continue to the main screen";
 
         public const string UpdatedSuccessfullyMessage = "updated successfully!";
@@ -36,6 +38,7 @@ namespace whoshomemobile
         [Description("Mac address")]
         MacAddress,
         [Description("Pi ID")]
-        PiID
+        PiID,
+        Unspecified
     }
 }

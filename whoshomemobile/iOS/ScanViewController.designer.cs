@@ -15,6 +15,10 @@ namespace whoshomemobile.iOS
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIButton ClearButton { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UILabel InformationLabel { get; set; }
 
         [Outlet]
@@ -27,10 +31,19 @@ namespace whoshomemobile.iOS
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIButton RenamePiButton { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIButton ScanButton { get; set; }
 
         void ReleaseDesignerOutlets ()
         {
+            if (ClearButton != null) {
+                ClearButton.Dispose ();
+                ClearButton = null;
+            }
+
             if (InformationLabel != null) {
                 InformationLabel.Dispose ();
                 InformationLabel = null;
@@ -44,6 +57,11 @@ namespace whoshomemobile.iOS
             if (PiIDDropBox != null) {
                 PiIDDropBox.Dispose ();
                 PiIDDropBox = null;
+            }
+
+            if (RenamePiButton != null) {
+                RenamePiButton.Dispose ();
+                RenamePiButton = null;
             }
 
             if (ScanButton != null) {
