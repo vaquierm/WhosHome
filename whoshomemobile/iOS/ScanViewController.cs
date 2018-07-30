@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Collections.Generic;
 using UIKit;
 
 namespace whoshomemobile.iOS
@@ -60,9 +60,12 @@ namespace whoshomemobile.iOS
             _piIDPickerModel.AuthorizedPis.AddRange(_userPublic.AuthorizedPiList);
             PiIDDropBox.Model = _piIDPickerModel;
 
+            _message = StringConstants.ScanAndFindOutWhoIsHomeMessage;
+
             ScanButton.TouchUpInside += ScanButtonClick;
             ClearButton.TouchUpInside += ClearButtonClick;
             RenamePiButton.TouchUpInside += RenameButtonClick;
+
         }
 
         public override void DidReceiveMemoryWarning()
@@ -73,17 +76,43 @@ namespace whoshomemobile.iOS
 
         public void ScanButtonClick(object sender, EventArgs e)
         {
+            List<UserPublic> scannedUsers = null;
+
             if (!string.IsNullOrWhiteSpace(_selectedPiID))
             {
-                IoTClientManager.ScanMethod(_selectedPiID);
+                scannedUsers = IoTClientManager.ScanMethod(_selectedPiID);
             }
 
-            IoTClientManager.ScanMethod(_selectedPiID);
+            if (scannedUsers == null)
+            {
+                InformationLabel.TextColor = UIColor.Red;
+                _message = string.Format(StringConstants.SomethingWentWrongWhileScanning, _selectedPiPerferedName);
+                return;
+            }
+
+            List<string> newScans = new List<string>();
+
+            foreach (UserPublic user in scannedUsers)
+            {
+                newScans.Add($"{user.FullName} ({user.Id})");
+            }
+
+            IsHomeTableView.Source = new IsHomeTableSource(newScans.ToArray());
+            IsHomeTableView.ReloadData();
+
+            InformationLabel.TextColor = UIColor.DarkGray;
+            _message = string.Format(StringConstants.ScanSuccessfulMessage, _selectedPiPerferedName);
         }
 
         public void ClearButtonClick(object sender, EventArgs e)
         {
-            
+            List<string> empty = new List<string>();
+
+            IsHomeTableView.Source = new IsHomeTableSource(empty.ToArray());
+            IsHomeTableView.ReloadData();
+
+            InformationLabel.TextColor = UIColor.DarkGray;
+            _message = StringConstants.ScanAndFindOutWhoIsHomeMessage;
         }
 
         public void RenameButtonClick(object sender, EventArgs e)

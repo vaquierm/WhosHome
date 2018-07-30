@@ -22,6 +22,10 @@ namespace whoshomemobile
 
         public const string ContinueToMainScreenMessage = "You have processed all your scan requests, continue to the main screen";
 
+        public const string ScanAndFindOutWhoIsHomeMessage = "Scan and find out who's home!";
+        public const string ScanSuccessfulMessage = "Scan {0} successfull!";
+        public const string SomethingWentWrongWhileScanning = "Something went wrong while scanning {0}...";
+
         public const string UpdatedSuccessfullyMessage = "updated successfully!";
         public const string MacAddressAlreadyExistsMessage = "This Mac Address already exists in our databases";
 

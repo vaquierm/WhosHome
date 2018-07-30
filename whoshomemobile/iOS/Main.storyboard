@@ -175,9 +175,6 @@
                                     <color key="titleColor" colorSpace="calibratedRGB" red="0.2196078431372549" green="0.56470588235294117" blue="0.5725490196078431" alpha="1"/>
                                 </state>
                             </button>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" id="1335" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
-                                <rect key="frame" x="50" y="471" width="313" height="200"/>
-                            </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="3835" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
                                 <rect key="frame" x="251" y="424" width="78" height="30"/>
                                 <state key="normal" title="Rename"/>
@@ -186,6 +183,29 @@
                                 <rect key="frame" x="98" y="424" width="56" height="30"/>
                                 <state key="normal" title="Clear"/>
                             </button>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="4414" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
+                                <rect key="frame" x="62" y="499" width="289" height="175"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="4415" style="IBUITableViewCellStyleDefault" textLabel="5572">
+                                        <rect key="frame" x="0.0" y="28" width="289" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="4415" id="4416">
+                                            <rect key="frame" x="0.0" y="0.0" width="289" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="5572">
+                                                    <rect key="frame" x="15" y="0.0" width="259" height="43.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
                         </subviews>
                     </view>
                     <tabBarItem key="tabBarItem" title="Scan" image="Second" id="cPa-gy-q4n"/>
@@ -193,9 +213,9 @@
                         <outlet property="InformationLabel" destination="1333" id="name-outlet-1333"/>
                         <outlet property="ScanButton" destination="1334" id="name-outlet-1334"/>
                         <outlet property="PiIDDropBox" destination="1331" id="name-outlet-1331"/>
-                        <outlet property="IsHomeStackView" destination="1335" id="name-outlet-1335"/>
                         <outlet property="RenamePiButton" destination="3835" id="name-outlet-3835"/>
                         <outlet property="ClearButton" destination="3864" id="name-outlet-3864"/>
+                        <outlet property="IsHomeTableView" destination="4414" id="name-outlet-4414"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Nw-L8-lE0" sceneMemberID="firstResponder"/>

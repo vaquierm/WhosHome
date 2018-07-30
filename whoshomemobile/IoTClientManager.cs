@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Azure.Devices;
+using Newtonsoft.Json;
 
 namespace whoshomemobile
 {
@@ -16,11 +18,15 @@ namespace whoshomemobile
             _registryManager = RegistryManager.CreateFromConnectionString(Authentification.IoTServiceConnectionString);
         }
 
-        public static async void ScanMethod(string deviceId)
+        public static List<UserPublic> ScanMethod(string deviceId)
         {
             CloudToDeviceMethod method = new CloudToDeviceMethod("scan");
             Task<CloudToDeviceMethodResult> resultTask = _serviceClient.InvokeDeviceMethodAsync(deviceId, method);
-            CloudToDeviceMethodResult result = await resultTask;
+            CloudToDeviceMethodResult result = resultTask.Result;
+
+            List<UserPublic> list = JsonConvert.DeserializeObject<List<UserPublic>>(result.GetPayloadAsJson());
+
+            return list;
         }
 
         public static string GetPiConnectionString(string deviceId)

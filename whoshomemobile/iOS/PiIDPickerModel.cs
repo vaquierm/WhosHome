@@ -10,7 +10,21 @@ namespace whoshomemobile.iOS
 
         private UILabel InformationLabel;
 
-        public AuthorizedPi SelectedPi = null;
+        public AuthorizedPi SelectedPi
+        {
+            get
+            {
+                if (_selectedPi == null)
+                    return AuthorizedPis?[0];
+                else
+                    return _selectedPi;
+            }
+            set
+            {
+                _selectedPi = value;
+            }
+        }
+        private AuthorizedPi _selectedPi;
 
         public PiIDPickerModel(UILabel informationLabel)
         {

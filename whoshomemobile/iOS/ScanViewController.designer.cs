@@ -23,7 +23,7 @@ namespace whoshomemobile.iOS
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIStackView IsHomeStackView { get; set; }
+        UIKit.UITableView IsHomeTableView { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
@@ -49,9 +49,9 @@ namespace whoshomemobile.iOS
                 InformationLabel = null;
             }
 
-            if (IsHomeStackView != null) {
-                IsHomeStackView.Dispose ();
-                IsHomeStackView = null;
+            if (IsHomeTableView != null) {
+                IsHomeTableView.Dispose ();
+                IsHomeTableView = null;
             }
 
             if (PiIDDropBox != null) {

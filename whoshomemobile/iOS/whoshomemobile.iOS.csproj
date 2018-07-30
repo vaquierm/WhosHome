@@ -160,6 +160,7 @@
     <Compile Include="ScanRequestsViewController.designer.cs">
       <DependentUpon>ScanRequestsViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="IsHomeTableSource.cs" />
   </ItemGroup>
   <Import Project="..\whoshomemobile.projitems" Label="Shared" Condition="Exists('..\whoshomemobile.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
