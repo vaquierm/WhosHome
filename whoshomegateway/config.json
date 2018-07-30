@@ -1,6 +1,6 @@
 {
-    "deviceId": "",
     "credentialPath": "~/.iot-hub",
-    "connectionString" : "IoTConnectionStringHere",
-    "macDatabaseString" : "DBConnectionStringHere"
+    "connectionString" : "IoT Hub connection string here",
+    "databaseHost" : "Cosmos database api endpoint here",
+    "databaseKey" : "Cosmos database primary key"
 }
