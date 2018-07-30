@@ -9,8 +9,10 @@ const Protocol = require('azure-iot-device-mqtt').Mqtt;
 
 const bi = require('az-iot-bi');
 
-var MongoClient = require('mongodb').MongoClient;
-var ObjectId = require('mongodb').ObjectID;
+const DocumentDBClient = require('documentdb').DocumentClient
+const databaseId = "whoshome";
+const collectionUri = "dbs/whoshome/colls/UsersPublic";
+var db;
 
 //To scan the MAC addresses on the network
 const nmap = require('libnmap');
@@ -19,7 +21,7 @@ let scanOpts = {
     timeout: 0.5
   };
 
-let IoTclient, DBClient, config;
+let IoTclient, config, DBClient;
 
 function sendMessage() {
     var message = new Message("Hello");
@@ -80,33 +82,34 @@ function onScan(request, response) { //The payload must be in json format or str
             }
         }
 
+        var doneProcessing = false;
         console.log('[Cosmos DB Client] Fetching Mac address database...');
-        //Mathing scan results with database
-        let db = DBClient.db('whoshome');
-        let macs = db.collection('macAddresses').find();
-        
-        console.log('[Cosmos DB Client] Mac Address database successfully fetched!');
-
-        macs.each(function(err, doc) {
+        DBClient.readDocuments(collectionUri).toArray(function (err, docs) {
             if (err) {
-                console.err('[Cosmos DB Client] Document error: ' + err.message);
+                console.error('[Cosmos DB Client] Error while fetching documents : ' + err);
+            
+            } else {
+                console.log('[Cosmos DB Client] ' + docs.length + ' Documents found');
             }
-            if (doc != null && scannedDevices.includes(doc.mac)) {
-                recognozedDevices.push(doc);
-                console.log('[Cosmos DB Client] Device recognized: { "id" : "' + doc.id + '", "mac" : "' + doc.mac + '" }');
+
+            for (let i = 0 ; i < docs.length ; i++) {
+                let thisDoc = docs[i];
+
+                if (thisDoc && thisDoc.macAddress && scannedDevices.includes(thisDoc.macAddress)) {
+                    recognozedDevices.push(thisDoc);
+                    console.log('[Cosmos DB Client] Device recognized: { "id" : "' + thisDoc.id + '", "fullName" : "' + thisDoc.fullName + '", "mac" : "' + thisDoc.macAddress + '" }');
+                }
             }
+            
+            console.error('[IoT hub Client] sending back response ( ' + recognozedDevices.length + ' devices recognized )');
+            //sending response back
+            response.send(200, recognozedDevices, function (err) {
+                console.log('[IoT hub Client] Devices recognizes sent');
+                if (err) {
+                    console.error('[IoT hub Client] Failed sending a method response: ' + err.message);
+                }
+            });
         });
-
-        //TODO : write code that ensure that this happens after the for each
-
-        console.error('[IoT hub Client] sending back response ( ' + recognozedDevices.length + ' devices recognized )');
-        //sending response back
-        response.send(200, recognozedDevices, function (err) {
-            if (err) {
-                console.error('[IoT hub Client] Failed sending a method response: ' + err.message);
-            }
-        });
-
     });
 }
 
@@ -144,18 +147,12 @@ function initClientIoT() {
 }
 
 function initClientDB() {
-    let url = config.macDatabaseString;
+    let host = config.databaseHost;
+    let key = config.databaseKey;
 
-    MongoClient.connect(url, { useNewUrlParser : true }, function(err, client) {
-        if (err) {
-            console.error('[Cosmos DB Client] Connect error: ' + err.message);
-            return;
-        }
+    DBClient = new DocumentDBClient(host, { masterKey: key });
 
-        console.log('[Cosmos DB Client] Connect success!');
-
-        DBClient = client;
-    });
+    console.log('[Cosmos DB Client] Connect success!');
 }
 
 // read in configuration in config.json
