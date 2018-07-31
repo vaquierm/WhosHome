@@ -43,6 +43,7 @@ namespace whoshomemobile
 
         public static UserPublic userPublic = null;
         public static UserPrivate userPrivate = null;
+        public static string PiConnectionString = null;
 
         internal static void InitSignInManager()
         {
@@ -84,6 +85,8 @@ namespace whoshomemobile
                 userPublic = user;
             }
 
+            PiConnectionString = IoTClientManager.GetPiConnectionString(userPublic.Id);
+
             return true;
         }
 
@@ -115,6 +118,11 @@ namespace whoshomemobile
                 return false;
             }
 
+            if (!IoTClientManager.CreateDevice(username, out statusMessage))
+            {
+                return false;
+            }
+
             if (idToReplace == null)
                 _documentClient.CreateDocumentAsync(PublicUsersCollectionUri, uPublic);
             else
@@ -123,6 +131,7 @@ namespace whoshomemobile
 
             userPublic = uPublic;
             userPrivate = uPrivate;
+            PiConnectionString = IoTClientManager.GetPiConnectionString(uPublic.Id);
 
             statusMessage = $"User '{username}' has been registered successsfully.";
             return true;

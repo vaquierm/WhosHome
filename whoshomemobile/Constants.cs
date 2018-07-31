@@ -18,6 +18,7 @@ namespace whoshomemobile
         public const string WouldLikeToScanYourHomeMessage = "{0} ({1}) would like to scan your home.";
         public const string RenamePiMessage = "Rename {0}";
         public const string NewPiNameCannotBeEmptyErrorMessage = "Name new name for {0} cannot be empty";
+        public const string CannorRenameYourOwnHomeErrorMessage = "You cannot rename your own home";
         public static string FullNameCannotBeEmpty = "Full name cannot be empty";
 
         public const string ContinueToMainScreenMessage = "You have processed all your scan requests, continue to the main screen";

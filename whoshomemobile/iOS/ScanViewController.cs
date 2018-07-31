@@ -78,9 +78,16 @@ namespace whoshomemobile.iOS
         {
             List<UserPublic> scannedUsers = null;
 
-            if (!string.IsNullOrWhiteSpace(_selectedPiID))
+            string message;
+            if (IoTClientManager.IsDeviceConnected(_selectedPiID, out message))
             {
                 scannedUsers = IoTClientManager.ScanMethod(_selectedPiID);
+            }
+            else
+            {
+                InformationLabel.TextColor = UIColor.Red;
+                _message = message;
+                return;
             }
 
             if (scannedUsers == null)
@@ -117,6 +124,12 @@ namespace whoshomemobile.iOS
 
         public void RenameButtonClick(object sender, EventArgs e)
         {
+            if (_selectedPiID == _userPublic.Id)
+            {
+                InformationLabel.TextColor = UIColor.Red;
+                _message = StringConstants.CannorRenameYourOwnHomeErrorMessage;
+                return;
+            }
             UIAlertView alert = new UIAlertView();
             alert.Title = "Rename";
             alert.AddButton("OK");

@@ -35,6 +35,19 @@ namespace whoshomemobile.iOS
             }
         }
 
+        private string _piConnectionString
+        {
+            get
+            {
+                return SignInManager.PiConnectionString;
+            }
+            set
+            {
+                SignInManager.PiConnectionString = value;
+            }
+        }
+            
+
         private string _informationLabelMessage
         {
             get
@@ -89,6 +102,8 @@ namespace whoshomemobile.iOS
             MacAddressActionButton.TouchUpInside += MacAddressActionClick;
             MacAddressCancelButton.TouchUpInside += MacAddressCancelClick;
 
+            PiConnectionStringTextBox.EditingChanged += OnTextChangedResetConnectionString;
+
             UsernameTextBox.Text = _userPrivate.Id;
             PasswordTextBox.Text = _userPrivate.Password;
             FullNameTextBox.Text = _userPublic.FullName;
@@ -134,6 +149,7 @@ namespace whoshomemobile.iOS
         {
             _userPublic = null;
             _userPrivate = null;
+            _piConnectionString = null;
             AppDelegate.LoadStoryboard("SignIn");
         }
 
@@ -267,5 +283,10 @@ namespace whoshomemobile.iOS
             ActionButtons[inputType].SetTitle(StringConstants.EditString, UIControlState.Normal);
         }
         #endregion
+
+        public void OnTextChangedResetConnectionString(object sender, EventArgs e)
+        {
+            PiConnectionStringTextBox.Text = _piConnectionString;
+        }
     }
 }

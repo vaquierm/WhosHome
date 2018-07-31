@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Azure.Devices;
+using Microsoft.Azure.Devices.Common.Exceptions;
 using Newtonsoft.Json;
 
 namespace whoshomemobile
@@ -14,8 +15,8 @@ namespace whoshomemobile
 
         internal static void InitIoTClientManager()
         {
-            _serviceClient = ServiceClient.CreateFromConnectionString(Authentification.IoTServiceConnectionString);
-            _registryManager = RegistryManager.CreateFromConnectionString(Authentification.IoTServiceConnectionString);
+            _serviceClient = ServiceClient.CreateFromConnectionString(Authentification.IoTOwnerConnectionString);
+            _registryManager = RegistryManager.CreateFromConnectionString(Authentification.IoTOwnerConnectionString);
         }
 
         public static List<UserPublic> ScanMethod(string deviceId)
@@ -36,11 +37,46 @@ namespace whoshomemobile
             {
                 return "Your device cannot be found";
             }
-            string primaryKey = GetDeviceFromId(deviceId).Authentication.SymmetricKey.PrimaryKey;
+            string primaryKey = device.Authentication.SymmetricKey.PrimaryKey;
             return primaryKey;
         }
 
-        public static Device GetDeviceFromId(string deviceId)
+        public static bool CreateDevice(string deviceId, out string ErrorMessage)
+        {
+            try
+            {
+                _registryManager.AddDeviceAsync(new Device(deviceId));
+            }
+            catch (DeviceAlreadyExistsException)
+            {
+                ErrorMessage = "Something went wrong creating your Device...";
+                return false;
+            }
+
+            ErrorMessage = "Pi created successfully";
+            return true;
+        }
+
+        public static bool IsDeviceConnected(string deviceId, out string ErrorMessage)
+        {
+            DeviceConnectionState state = GetDeviceConnectionState(deviceId);
+
+            ErrorMessage = null;
+
+            switch (state)
+            {
+                case DeviceConnectionState.Connected:
+                    ErrorMessage = $"Device {deviceId} connected!";
+                    return true;
+                case DeviceConnectionState.Disconnected:
+                    ErrorMessage = $"Device {deviceId} is currently disconnected...";
+                    return false;
+            }
+
+            return false;
+        }
+
+        private static Device GetDeviceFromId(string deviceId)
         {
             Device device;
             try
@@ -54,10 +90,15 @@ namespace whoshomemobile
             return device;
         }
 
-        public static DeviceStatus GetDeviceStatus(string deviceId)
+        private static DeviceConnectionState GetDeviceConnectionState(string deviceId)
         {
-            DeviceStatus status = GetDeviceFromId(deviceId).Status;
-            return status;
+            Device device = GetDeviceFromId(deviceId);
+
+            if (device == null)
+                return DeviceConnectionState.Disconnected;
+            
+            DeviceConnectionState deviceConnectionState = device.ConnectionState;
+            return deviceConnectionState;
         }
     }
 
