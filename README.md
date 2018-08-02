@@ -22,21 +22,23 @@ With this application, you can quickly checks if your friends are home without t
 First create an Azure account.
 When on the portal, you can click on 'create ressource' and search for 'IoT Hub'.
 
-![Create an Azure IoT Hub](images/Create_Azure_IoT_Hub.png)
+<img src="images/Create_Azure_IoT_Hub.png" width="350" />
 
 Once created find your 'Owner connection string' by navigating to 'Shared Access Policies' and clicking on 'iothubowner'. The primary connection string found here will later be refered to in this document as the 'IoTOwnerConnectionString'.
 
-![Connection String IoT owner](images/IoT_Hub_ConnectionString.png)
+<p align="center">
+  <img src="images/IoT_Hub_ConnectionString.png" />
+</p>
 
 Next you need to create the Cosmos database. Create it the same way as you did for the IoT hub by clicking on 'create ressource' and search 'Azure Cosmos DB'.
 
-![Create an Azure Cosmos Database](images/Create_Azure_CosmosDB.png)
+<img src="images/Create_Azure_CosmosDB.png" width="350" />
 
 Once the ressource is created you need to create the actual document collections. You need to create two collections, one which will hold the public user data and another that holds the private data.
 
 Navigate to 'Data Explorer' and click on 'New Database'. Next, right click on the newly created database and select 'New Collection'. Repeat the last step and create another collection under the same database. The result should look like this.
 
-![Create Collections in Azure Cosmos DB](images/Create_Collections_Azure_Cosmos_DB.png)
+<img src="images/Create_Collections_Azure_Cosmos_DB.png" width="350" />
 
 Finally the authentification keys to interact with the database need to be obtained. To do so, navigate to 'Connection String' and get the primary password. That will be refered to as the 'DatabasePrimaryKey' from now on. The other piece of information needed is the API endpoint of the database that you can get by navigating to 'Overview'; it is the Uri that should look something like this.
 `https://<YourDatabaseAccountName>.documents.azure.com:443/`
@@ -55,9 +57,9 @@ The other feature is ther network of permissions. A user can request another use
 The mobile app is a Xamarin Native Multiplatform Mobile applcation written in C# to target iOS and Android (still in developpement) devices. When users are created, an IoT device is created on the IoT hub and the connection string is returned to the user. All user data and the permission vectors are stored in JSON form in the Cosmos Database. The Newtonsoft Json package is used for all deserialisation and serialisation of data.
 
 <p float="left" align="center">
-  <img src="images/Profile_Tab_iOS.png" width="100" />
-  <img src="images/Scan_Tab_iOS.png" width="100" /> 
-  <img src="images/Features_Tab_iOS.png" width="100" />
+  <img src="images/Profile_Tab_iOS.png" width="250" />
+  <img src="images/Scan_Tab_iOS.png" width="250" /> 
+  <img src="images/Features_Tab_iOS.png" width="250" />
 </p>
 
 #### Packages Used
