@@ -2,5 +2,7 @@
     "credentialPath": "~/.iot-hub",
     "connectionString" : "IoT Hub connection string here",
     "databaseHost" : "Cosmos database api endpoint here",
-    "databaseKey" : "Cosmos database primary key"
+    "databaseKey" : "Cosmos database primary key here",
+    "databaseName" : "Cosmos database name here",
+    "publicCollectionName" : "Public collection name here"
 }
