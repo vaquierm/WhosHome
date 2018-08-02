@@ -54,8 +54,10 @@ The other feature is ther network of permissions. A user can request another use
 ### How it works
 The mobile app is a Xamarin Native Multiplatform Mobile applcation written in C# to target iOS and Android (still in developpement) devices. When users are created, an IoT device is created on the IoT hub and the connection string is returned to the user. All user data and the permission vectors are stored in JSON form in the Cosmos Database. The Newtonsoft Json package is used for all deserialisation and serialisation of data.
 
-<p align="center">
-![Profile Tab iOS](images/Profile_Tab_iOS.png) ![Scan Tab iOS](images/Scan_Tab_iOS.png) ![Features Tab iOS](images/Features_Tab_iOS.png)
+<p float="left" align="center">
+  <img src="images/Profile_Tab_iOS.png" width="100" />
+  <img src="images/Scan_Tab_iOS.png" width="100" /> 
+  <img src="images/Features_Tab_iOS.png" width="100" />
 </p>
 
 #### Packages Used
