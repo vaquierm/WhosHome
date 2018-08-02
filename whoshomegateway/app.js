@@ -11,7 +11,7 @@ const bi = require('az-iot-bi');
 
 const DocumentDBClient = require('documentdb').DocumentClient
 const databaseId = "whoshome";
-const collectionUri = "dbs/whoshome/colls/UsersPublic";
+var collectionUri;
 var db;
 
 //To scan the MAC addresses on the network
@@ -151,6 +151,7 @@ function initClientDB() {
     let key = config.databaseKey;
 
     DBClient = new DocumentDBClient(host, { masterKey: key });
+    collectionUri = "dbs/" + config.databaseName + "/colls/" + config.publicCollectionName;
 
     console.log('[Cosmos DB Client] Connect success!');
 }
